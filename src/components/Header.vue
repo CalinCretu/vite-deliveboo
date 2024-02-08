@@ -31,7 +31,7 @@
         </nav>
         <div :class="active ? 'active' : ''" class="bg-admin-btn-card">
             <div class="admin-btn-card">
-                <h2>Se sei il ristoratore oppure vuoi apprire il tuo account clicca</h2>
+                <h2>Se sei il ristoratore oppure vuoi aprire il tuo account clicca</h2>
                 <a @click="getAdminBtn()" href="http://127.0.0.1:8000/login" class="admin-btn">Login</a>
                 <a @click="getAdminBtn()" href="http://127.0.0.1:8000/register" class="admin-btn">Registrati</a>
             </div>
