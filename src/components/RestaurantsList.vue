@@ -7,6 +7,7 @@ export default {
         return {
             store: store,
             restaurantsArray: [],
+            PATH: 'http://127.0.0.1:8000/storage/',
         }
     },
     components: {
@@ -17,6 +18,7 @@ export default {
             axios.get('http://127.0.0.1:8000/api/users')
                 .then(res => {
                     this.restaurantsArray = res.data.results;
+                    console.log(this.restaurantsArray);
                 })
         },
         fetchRestaurantsByName() {
@@ -44,10 +46,10 @@ export default {
 
 <template>
     <section class="restaurants-list" id="restaurants-list">
-        <input type="text" name="restaurant-name" id="restaurant-name" v-model="store.request.name"
-            @keyup="fetchRestaurantsByName">
         <div class="container">
             <h2 class="title">Cosa vuoi mangiare?</h2>
+            <input type="text" name="restaurant-name" id="restaurant-name" class="restaurant-search" placeholder="Cerca il nome di un ristorante" v-model="store.request.name"
+                @keyup.enter="fetchRestaurantsByName">
 
 
             <Categories @fetch-restaurants="fetchRestaurantsByName()"/>
@@ -55,17 +57,16 @@ export default {
             <button class="btn" @click="resetFilter()">Reset</button>
 
             <div class="grid">
-                <div class="restaurant-card" v-for="n in 10">
+                <div class="restaurant-card" v-for="restaurant in this.restaurantsArray">
                     <div class="restaurant-card-image">
-                        <img src="../assets/img/cover-ristorante.jpg" alt="cover">
+                        <img :src="this.PATH + restaurant.restaurant_img" alt="cover">
                     </div>
                     <div class="restaurant-card-body">
-                        <h4 class="name">Nome ristorante</h4>
-                        <p class="address">Indirizzo ristorante</p>
-                        <div class="categories">
-                            <span class="category">Categoria 1</span>
-                            <span class="category">Categoria 2</span>
-                            <span class="category">Categoria 3</span>
+                        <h4 class="name">{{ restaurant.business_name}}</h4>
+                        <p class="address">{{ restaurant.address}}</p>
+                        <div class="categories" >
+                            <span class="category" v-for="category in restaurant.types">{{ category.name }}</span>
+                            
                         </div>
                         <a href="" class="link">
                             Guarda il menù
@@ -78,11 +79,7 @@ export default {
 
             
         </div>
-        <ul>
-            <li v-for="restaurant in restaurantsArray">
-                {{ restaurant.business_name }}
-            </li>
-        </ul>
+        
     </section>
 </template>
 
@@ -108,6 +105,24 @@ section.restaurants-list {
         border-radius: 5rem;
         cursor: pointer;
         margin-inline: auto;
+    }
+
+    input.restaurant-search {
+        display: block;
+        width: min(500px, 100%);
+        outline: none;
+        color: $charcoal;
+        margin-inline: auto;
+        border: 1px solid $silver;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-family: 'Outfit', sans-serif;
+        margin-bottom: 2rem;
+        &:focus {
+            border-color: $orange;
+        }
+        
     }
 
     .grid {
