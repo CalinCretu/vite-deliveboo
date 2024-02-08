@@ -1,15 +1,39 @@
-<template>
-    <div>
-
-    </div>
-</template>
-
 <script>
-    export default {
-        
+import axios from 'axios';
+import RestaurantProfile from '../components/RestaurantProfile.vue';
+import ItemsList from '../components/ItemsList.vue';
+
+export default {
+    data() {
+        return {
+            items: []
+        }
+    },
+    props: {
+        slug: String,
+    },
+    components: {
+        // RestaurantProfile,
+        ItemsList
+    },
+    methods: {
+        fetchItems() {
+            axios.get(`http://127.0.0.1:8000/api/items/${this.slug}`)
+                .then(res => {
+                    this.items = res.data
+                    console.log(res.data);
+                })
+        }
+    },
+    created() {
+        this.fetchItems()
     }
+}
 </script>
 
-<style lang="scss" scoped>
+<template>
+    <!-- <RestaurantProfile :restaurant="restaurant" /> -->
+    <ItemsList :items="items" />
+</template>
 
-</style>
+<style lang="scss" scoped></style>

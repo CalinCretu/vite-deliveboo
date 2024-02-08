@@ -25,7 +25,6 @@ export default {
             axios.post('http://127.0.0.1:8000/api/users', this.store.request)
                 .then(res => {
                     this.restaurantsArray = res.data.results;
-                    console.log(this.store.categories[0].isOn);
                 })
         },
         resetFilter() {
@@ -52,12 +51,12 @@ export default {
                 @keyup.enter="fetchRestaurantsByName">
 
 
-            <Categories @fetch-restaurants="fetchRestaurantsByName()"/>
+            <Categories @fetch-restaurants="fetchRestaurantsByName()" />
             <!-- <button class="btn">Cerca</button> -->
             <button class="btn" @click="resetFilter()">Reset</button>
 
             <div class="grid">
-                <div class="restaurant-card" v-for="restaurant in this.restaurantsArray">
+                <div class="restaurant-card" v-for="restaurant in restaurantsArray">
                     <div class="restaurant-card-image">
                         <img :src="this.PATH + restaurant.restaurant_img" alt="cover">
                     </div>
@@ -66,20 +65,12 @@ export default {
                         <p class="address">{{ restaurant.address}}</p>
                         <div class="categories" >
                             <span class="category" v-for="category in restaurant.types">{{ category.name }}</span>
-                            
                         </div>
-                        <a href="" class="link">
-                            Guarda il menù
-                        </a>
-
-
+                        <router-link class="link" :to="{ name: 'restaurant.show', params: {slug: restaurant.slug} }">Guarda il menù</router-link>
                     </div>
                 </div>
             </div>
-
-            
         </div>
-        
     </section>
 </template>
 
@@ -139,14 +130,16 @@ section.restaurants-list {
         overflow: hidden;
         background-color: $linen;
         transition: $transition;
+
         &:hover {
             box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
-    }
+        }
+
         .restaurant-card-image {
             height: 250px;
             transform: scale(1);
             overflow: hidden;
-            
+
             img {
                 height: 100%;
                 width: 100%;
@@ -159,6 +152,7 @@ section.restaurants-list {
                 }
             }
         }
+
         .restaurant-card-body {
             flex-grow: 1;
             display: flex;
@@ -174,10 +168,12 @@ section.restaurants-list {
                 cursor: pointer;
                 color: $charcoal;
                 transition: $transition;
+
                 &:hover {
                     color: $orange;
                 }
             }
+
             .address {
                 // margin-bottom: 1rem;
                 font-weight: 300;
@@ -192,7 +188,8 @@ section.restaurants-list {
                 gap: 0.5rem;
                 font-size: 0.75rem;
                 font-weight: 600;
-                // margin-bottom: 1rem;
+                margin-bottom: 1rem;
+
                 .category {
                     background-color: transparent;
                     border: 1px solid $silver;
@@ -203,27 +200,20 @@ section.restaurants-list {
             }
 
             .link {
-                display: block;
-                // flex-grow: 1;
-                align-self: end;
-                margin-top: auto;
-                
                 background-color: $orange;
-                
                 border-radius: 5rem;
                 transform: scale(1);
                 transition: $transition;
                 cursor: pointer;
                 color: $white;
                 padding: 0.5rem 1rem;
-            
-                
-                
-                }
-            
+
+
+
+            }
+
 
         }
     }
-    
-}
-</style>
+
+}</style>

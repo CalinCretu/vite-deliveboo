@@ -16,10 +16,10 @@ const router = createRouter({
       component: HomePage,
     },
     {
-      path: "/restaurant",
+      path: "/restaurant/:slug",
       name: "restaurant.show",
-      props: true,
       component: RestaurantPage,
+      props: true,
     },
     {
       path: "/:pathMatch(.*)*",
