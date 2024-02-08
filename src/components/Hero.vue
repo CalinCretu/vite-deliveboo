@@ -1,30 +1,21 @@
 <template>
     <section class="hero" id="home">
-        <swiper
-            :centeredSlides="true"
-            
-            :loop="true"
-            :speed="2000"
-            :effect="'fade'"
-            :autoplay="{
-                delay: 4000,
-                disableOnInteraction: false,
-            }"
-            :pagination=" false"
-            :navigation="false"
-            :modules="modules"
-            class="mySwiper"
-        >
+        <swiper :centeredSlides="true" :loop="true" :speed="2000" :effect="'fade'" :autoplay="{
+            delay: 4000,
+            disableOnInteraction: false,
+        }" :pagination="false" :navigation="false" :modules="modules" class="mySwiper">
             <swiper-slide><img src="../assets/img/slide1.jpg" alt="slide1"></swiper-slide>
             <swiper-slide><img src="../assets/img/slide2.jpg" alt="slide2"></swiper-slide>
             <swiper-slide><img src="../assets/img/slide3.jpg" alt="slide3"></swiper-slide>
             <swiper-slide><img src="../assets/img/slide4.jpg" alt="slide4"></swiper-slide>
             <swiper-slide><img src="../assets/img/slide5.jpg" alt="slide5"></swiper-slide>
-            
+
         </swiper>
 
         <div class="hero-content">
-            <div class="container"><VueWriter :array="arr" :eraseSpeed="30" :typeSpeed="70" :caret="underscore"/></div>
+            <div class="container">
+                <VueWriter :array="arr" :eraseSpeed="30" :typeSpeed="70" :caret="underscore" />
+            </div>
         </div>
 
         <a href="#restaurants-list" class="btn">Ordina ora</a>
@@ -48,21 +39,21 @@ import 'swiper/css/effect-fade';
 
 // import required modules
 import { Autoplay, EffectFade } from 'swiper/modules';
-    export default {
-        components: {
-      Swiper,
-      SwiperSlide,
+export default {
+    components: {
+        Swiper,
+        SwiperSlide,
     },
 
     data() {
         return {
             modules: [Autoplay, EffectFade],
-            arr: ["Scegli cosa mangiare", "Ordina con un click", "Al resto ci pensiamo noi"] ,
-            
+            arr: ["Scegli cosa mangiare", "Ordina con un click", "Al resto ci pensiamo noi"],
+
         }
     }
-        
-    }
+
+}
 </script>
 
 <style lang="scss" scoped>
@@ -71,7 +62,8 @@ import { Autoplay, EffectFade } from 'swiper/modules';
 .hero {
     position: relative;
     height: calc(100vh);
-    padding-top: $height-header;
+
+    // padding-top: $height-header;
     .hero-content {
         display: flex;
         align-items: center;
@@ -113,6 +105,7 @@ import { Autoplay, EffectFade } from 'swiper/modules';
             transform-origin: left;
             transition: $transition;
         }
+
         &:hover {
             color: $orange;
         }
@@ -121,36 +114,36 @@ import { Autoplay, EffectFade } from 'swiper/modules';
             transform: scaleX(1);
         }
 
-        
+
 
     }
 }
+
 .swiper {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 .swiper-slide {
-  text-align: center;
-  font-size: 18px;
-  background: #fff;
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
 
-  /* Center slide text vertically */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    /* Center slide text vertically */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .swiper-slide img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .swiper {
-  margin-left: auto;
-  margin-right: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
-
 </style>

@@ -21,6 +21,9 @@ import {
   faRocket,
   faTrophy,
   faCalendarDays,
+  faUserTie,
+  faXmark,
+  faBarsStaggered,
   faRightLong,
 } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -60,6 +63,10 @@ library.add(
   faInstagram,
   faFacebook,
   faTwitter,
+  faUserTie,
+  faOpencart,
+  faXmark,
+  faBarsStaggered,
   faRightLong
 );
 
