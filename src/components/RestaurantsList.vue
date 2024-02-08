@@ -7,6 +7,7 @@ export default {
         return {
             store: store,
             restaurantsArray: [],
+            PATH: 'http://127.0.0.1:8000/storage/',
         }
     },
     components: {
@@ -17,6 +18,7 @@ export default {
             axios.get('http://127.0.0.1:8000/api/users')
                 .then(res => {
                     this.restaurantsArray = res.data.results;
+                    console.log(this.restaurantsArray);
                 })
         },
         fetchRestaurantsByName() {
@@ -43,10 +45,10 @@ export default {
 
 <template>
     <section class="restaurants-list" id="restaurants-list">
-        <input type="text" name="restaurant-name" id="restaurant-name" v-model="store.request.name"
-            @keyup="fetchRestaurantsByName">
         <div class="container">
             <h2 class="title">Cosa vuoi mangiare?</h2>
+            <input type="text" name="restaurant-name" id="restaurant-name" class="restaurant-search" placeholder="Cerca il nome di un ristorante" v-model="store.request.name"
+                @keyup.enter="fetchRestaurantsByName">
 
 
             <Categories @fetch-restaurants="fetchRestaurantsByName()" />
@@ -56,16 +58,13 @@ export default {
             <div class="grid">
                 <div class="restaurant-card" v-for="restaurant in restaurantsArray">
                     <div class="restaurant-card-image">
-                        <img src="../assets/img/cover-ristorante.jpg" alt="cover">
+                        <img :src="this.PATH + restaurant.restaurant_img" alt="cover">
                     </div>
                     <div class="restaurant-card-body">
-                        <h4 class="name">{{ restaurant.business_name }}</h4>
-                        <p class="address">{{ restaurant.address }}</p>
-                        <p class="address">{{ restaurant.slug }}</p>
-                        <div class="categories">
-                            <span class="category">Categoria 1</span>
-                            <span class="category">Categoria 2</span>
-                            <span class="category">Categoria 3</span>
+                        <h4 class="name">{{ restaurant.business_name}}</h4>
+                        <p class="address">{{ restaurant.address}}</p>
+                        <div class="categories" >
+                            <span class="category" v-for="category in restaurant.types">{{ category.name }}</span>
                         </div>
                         <router-link class="link" :to="{ name: 'restaurant.show', params: {slug: restaurant.slug} }">Guarda il menù</router-link>
                     </div>
@@ -99,6 +98,24 @@ section.restaurants-list {
         margin-inline: auto;
     }
 
+    input.restaurant-search {
+        display: block;
+        width: min(500px, 100%);
+        outline: none;
+        color: $charcoal;
+        margin-inline: auto;
+        border: 1px solid $silver;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-family: 'Outfit', sans-serif;
+        margin-bottom: 2rem;
+        &:focus {
+            border-color: $orange;
+        }
+        
+    }
+
     .grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -107,6 +124,8 @@ section.restaurants-list {
     }
 
     .restaurant-card {
+        display: flex;
+        flex-direction: column;
         border-radius: 1rem;
         overflow: hidden;
         background-color: $linen;
@@ -135,11 +154,17 @@ section.restaurants-list {
         }
 
         .restaurant-card-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+            // height: 100%;
+            gap: 1rem;
             padding: 2rem;
 
             .name {
                 font-size: 1.5rem;
-                margin-bottom: 1rem;
+                // margin-bottom: 1rem;
                 cursor: pointer;
                 color: $charcoal;
                 transition: $transition;
@@ -150,7 +175,7 @@ section.restaurants-list {
             }
 
             .address {
-                margin-bottom: 1rem;
+                // margin-bottom: 1rem;
                 font-weight: 300;
                 color: $charcoal;
             }
@@ -175,10 +200,7 @@ section.restaurants-list {
             }
 
             .link {
-                display: inline-block;
-
                 background-color: $orange;
-
                 border-radius: 5rem;
                 transform: scale(1);
                 transition: $transition;

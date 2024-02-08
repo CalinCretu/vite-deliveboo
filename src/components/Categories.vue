@@ -32,13 +32,23 @@ export default {
             </label>
         </div>
     </div>
+
+    <div class="categories-list-mobile">
+        <div class="category" v-for="category in store.categories">
+            <input type="checkbox" :name="category.name" :id="category.name" class="my-checkbox" :checked="category.isOn" @click="pushType(category)">
+            <label :for="category.name">
+                
+                {{ category.name }}
+            </label>
+        </div>
+    </div>
 </template>
 
 <style lang="scss" scoped>
 @use '../scss/partials/variables' as *;
 
 .categories-list {
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
@@ -63,6 +73,7 @@ export default {
             border-radius: 0.25rem;
             overflow: hidden;
             transition: $transition;
+            cursor: pointer;
 
             &:hover {
                 box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
@@ -91,7 +102,7 @@ export default {
                 position: absolute;
                 right: 0.5rem;
                 top: 0.5rem;
-                background-color: $orange;
+                background-color: $charcoal;
                 color: $white;
                 padding: 0.25rem 0.5rem;
                 border-radius: 5rem;
@@ -102,7 +113,52 @@ export default {
         }
 
         input:checked~label span {
-            background-color: $charcoal;
+            background-color: $orange;
         }
+
+        
     }
-}</style>
+}
+
+.categories-list-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    .category {
+        display: flex;
+    }
+
+    input {
+        appearance: none;
+    }
+
+    label {
+        display: block;
+        background-color: $charcoal;
+        color: $white;
+        padding: 0.5rem 1rem;
+        border-radius: 5rem;
+        transition: $transition;
+    }
+
+    input:checked + label {
+        background-color: $orange;
+    }
+
+}
+
+@media (min-width: 1024px) {
+    .categories-list-mobile {
+        display: none;
+    }
+
+    .categories-list {
+        display: flex;
+    }
+}
+
+</style>
