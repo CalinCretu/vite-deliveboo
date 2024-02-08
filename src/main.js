@@ -21,6 +21,7 @@ import {
   faRocket,
   faTrophy,
   faCalendarDays,
+  faRightLong,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faUser,
@@ -58,7 +59,8 @@ library.add(
   faCalendarDays,
   faInstagram,
   faFacebook,
-  faTwitter
+  faTwitter,
+  faRightLong
 );
 
 createApp(App)
