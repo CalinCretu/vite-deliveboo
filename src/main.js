@@ -21,6 +21,9 @@ import {
   faRocket,
   faTrophy,
   faCalendarDays,
+  faUserTie,
+  faXmark,
+  faBarsStaggered
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faUser,
@@ -58,7 +61,11 @@ library.add(
   faCalendarDays,
   faInstagram,
   faFacebook,
-  faTwitter
+  faTwitter,
+  faUserTie,
+  faOpencart,
+  faXmark,
+  faBarsStaggered
 );
 
 createApp(App)
