@@ -23,7 +23,8 @@ import {
   faCalendarDays,
   faUserTie,
   faXmark,
-  faBarsStaggered
+  faBarsStaggered,
+  faRightLong,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faUser,
@@ -65,7 +66,8 @@ library.add(
   faUserTie,
   faOpencart,
   faXmark,
-  faBarsStaggered
+  faBarsStaggered,
+  faRightLong
 );
 
 createApp(App)
