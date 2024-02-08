@@ -133,6 +133,8 @@ section.restaurants-list {
     }
 
     .restaurant-card {
+        display: flex;
+        flex-direction: column;
         border-radius: 1rem;
         overflow: hidden;
         background-color: $linen;
@@ -158,11 +160,17 @@ section.restaurants-list {
             }
         }
         .restaurant-card-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+            // height: 100%;
+            gap: 1rem;
             padding: 2rem;
 
             .name {
                 font-size: 1.5rem;
-                margin-bottom: 1rem;
+                // margin-bottom: 1rem;
                 cursor: pointer;
                 color: $charcoal;
                 transition: $transition;
@@ -171,7 +179,7 @@ section.restaurants-list {
                 }
             }
             .address {
-                margin-bottom: 1rem;
+                // margin-bottom: 1rem;
                 font-weight: 300;
                 color: $charcoal;
             }
@@ -184,7 +192,7 @@ section.restaurants-list {
                 gap: 0.5rem;
                 font-size: 0.75rem;
                 font-weight: 600;
-                margin-bottom: 1rem;
+                // margin-bottom: 1rem;
                 .category {
                     background-color: transparent;
                     border: 1px solid $silver;
@@ -195,7 +203,10 @@ section.restaurants-list {
             }
 
             .link {
-                display: inline-block;
+                display: block;
+                // flex-grow: 1;
+                align-self: end;
+                margin-top: auto;
                 
                 background-color: $orange;
                 
