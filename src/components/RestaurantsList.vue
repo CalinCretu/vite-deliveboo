@@ -23,7 +23,6 @@ export default {
             axios.post('http://127.0.0.1:8000/api/users', this.store.request)
                 .then(res => {
                     this.restaurantsArray = res.data.results;
-                    console.log(this.store.categories[0].isOn);
                 })
         },
         resetFilter() {
@@ -50,39 +49,29 @@ export default {
             <h2 class="title">Cosa vuoi mangiare?</h2>
 
 
-            <Categories @fetch-restaurants="fetchRestaurantsByName()"/>
+            <Categories @fetch-restaurants="fetchRestaurantsByName()" />
             <!-- <button class="btn">Cerca</button> -->
             <button class="btn" @click="resetFilter()">Reset</button>
 
             <div class="grid">
-                <div class="restaurant-card" v-for="n in 10">
+                <div class="restaurant-card" v-for="restaurant in restaurantsArray">
                     <div class="restaurant-card-image">
                         <img src="../assets/img/cover-ristorante.jpg" alt="cover">
                     </div>
                     <div class="restaurant-card-body">
-                        <h4 class="name">Nome ristorante</h4>
-                        <p class="address">Indirizzo ristorante</p>
+                        <h4 class="name">{{ restaurant.business_name }}</h4>
+                        <p class="address">{{ restaurant.address }}</p>
+                        <p class="address">{{ restaurant.slug }}</p>
                         <div class="categories">
                             <span class="category">Categoria 1</span>
                             <span class="category">Categoria 2</span>
                             <span class="category">Categoria 3</span>
                         </div>
-                        <a href="" class="link">
-                            Guarda il menù
-                        </a>
-
-
+                        <router-link class="link" :to="{ name: 'restaurant.show', params: {slug: restaurant.slug} }">Guarda il menù</router-link>
                     </div>
                 </div>
             </div>
-
-            
         </div>
-        <ul>
-            <li v-for="restaurant in restaurantsArray">
-                {{ restaurant.business_name }}
-            </li>
-        </ul>
     </section>
 </template>
 
@@ -122,14 +111,16 @@ section.restaurants-list {
         overflow: hidden;
         background-color: $linen;
         transition: $transition;
+
         &:hover {
             box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
-    }
+        }
+
         .restaurant-card-image {
             height: 250px;
             transform: scale(1);
             overflow: hidden;
-            
+
             img {
                 height: 100%;
                 width: 100%;
@@ -142,6 +133,7 @@ section.restaurants-list {
                 }
             }
         }
+
         .restaurant-card-body {
             padding: 2rem;
 
@@ -151,10 +143,12 @@ section.restaurants-list {
                 cursor: pointer;
                 color: $charcoal;
                 transition: $transition;
+
                 &:hover {
                     color: $orange;
                 }
             }
+
             .address {
                 margin-bottom: 1rem;
                 font-weight: 300;
@@ -170,6 +164,7 @@ section.restaurants-list {
                 font-size: 0.75rem;
                 font-weight: 600;
                 margin-bottom: 1rem;
+
                 .category {
                     background-color: transparent;
                     border: 1px solid $silver;
@@ -181,23 +176,22 @@ section.restaurants-list {
 
             .link {
                 display: inline-block;
-                
+
                 background-color: $orange;
-                
+
                 border-radius: 5rem;
                 transform: scale(1);
                 transition: $transition;
                 cursor: pointer;
                 color: $white;
                 padding: 0.5rem 1rem;
-            
-                
-                
-                }
-            
+
+
+
+            }
+
 
         }
     }
-    
-}
-</style>
+
+}</style>
