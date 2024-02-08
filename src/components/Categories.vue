@@ -116,9 +116,7 @@ export default {
             background-color: $orange;
         }
 
-        input:checked~label img {
-            display: none;
-        }
+        
     }
 }
 
