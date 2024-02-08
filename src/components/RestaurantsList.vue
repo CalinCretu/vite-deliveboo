@@ -189,6 +189,7 @@ section.restaurants-list {
                 font-size: 0.75rem;
                 font-weight: 600;
                 margin-bottom: 1rem;
+                flex-grow: 1;
 
                 .category {
                     background-color: transparent;
@@ -198,7 +199,6 @@ section.restaurants-list {
                     border-radius: 2rem;
                 }
             }
-
             .link {
                 background-color: $orange;
                 border-radius: 5rem;
@@ -207,13 +207,8 @@ section.restaurants-list {
                 cursor: pointer;
                 color: $white;
                 padding: 0.5rem 1rem;
-
-
-
+                text-align: center;
             }
-
-
         }
     }
-
 }</style>
