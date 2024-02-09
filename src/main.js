@@ -28,7 +28,9 @@ import {
   faPepperHot,
   faSeedling,
   faWheatAwnCircleExclamation,
-  faCartPlus
+  faCartPlus,
+  faLocationDot,
+  faEnvelope
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faUser,
@@ -75,7 +77,9 @@ library.add(
   faPepperHot,
   faSeedling,
   faWheatAwnCircleExclamation,
-  faCartPlus
+  faCartPlus,
+  faLocationDot,
+  faEnvelope
 );
 
 createApp(App)
