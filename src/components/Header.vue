@@ -1,3 +1,31 @@
+<script>
+import { store } from '../store';
+export default {
+    data() {
+
+        return {
+            active: false,
+            headerBtn: false,
+            dropdown: false,
+            store
+        }
+    },
+    methods: {
+        getAdminBtn() {
+            this.active = !this.active
+            // console.log(this.active);
+        },
+        getHeaderBtn() {
+            this.headerBtn = !this.headerBtn
+            // console.log(this.headerBtn);
+        },
+        getCartDropdown() {
+            this.dropdown = !this.dropdown
+        }
+    }
+}
+</script>
+
 <template>
     <header>
         <nav class="container">
@@ -50,7 +78,7 @@
                 <font-awesome-icon :icon="['fas', 'xmark']" />
             </div>
         </div>
-        <transition name="slide">
+        <transition name="slide" v-enter-class="slide - enter">
             <div v-if="dropdown" class="cart-dropdown">
                 <div @click="getCartDropdown()" class="cart-close-btn">
                     <font-awesome-icon :icon="['fas', 'xmark']" />
@@ -81,33 +109,6 @@
         </transition>
     </header>
 </template>
-
-<script>
-export default {
-
-
-    data() {
-        return {
-            active: false,
-            headerBtn: false,
-            dropdown: false
-        }
-    },
-    methods: {
-        getAdminBtn() {
-            this.active = !this.active
-            // console.log(this.active);
-        },
-        getHeaderBtn() {
-            this.headerBtn = !this.headerBtn
-            // console.log(this.headerBtn);
-        },
-        getCartDropdown() {
-            this.dropdown = !this.dropdown
-        }
-    }
-}
-</script>
 
 <style lang="scss" scoped>
 @use '../scss/partials/variables' as *;
@@ -215,18 +216,12 @@ header {
 
     .slide-enter-active,
     .slide-leave-active {
-        transition: 0.3s ease;
-        // transform: translateY(100%);
-        /* Durata e curva di transizione */
+        transition: transform 0.3s ease;
     }
 
     .slide-enter,
-    .slide-leave-to
-
-    /* .slide-leave-active in Vue 2.1.8+ */
-        {
+    .slide-leave-to {
         transform: translateY(-100%);
-        /* Posizione iniziale per la transizione */
     }
 
     .cart-dropdown {
@@ -241,13 +236,12 @@ header {
         flex-direction: column;
 
         .cart-close-btn {
-            font-size: 18px;
             align-self: flex-end;
             margin: 10px 10px 0px 0px;
-            font-size: 2rem;
+            font-size: 1.2rem;
             background-color: $linen;
             border-radius: 50px;
-            width: 50px;
+            width: 35px;
             aspect-ratio: 1/1;
             display: flex;
             align-items: center;
@@ -264,6 +258,20 @@ header {
             &:active {
                 background-color: $linen;
                 color: $orange;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgb(255, 191, 72);
+            border-radius: 50px;
+
+            &:hover {
+                background: $orange;
+                width: 25px;
             }
         }
 
