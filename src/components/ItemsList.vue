@@ -36,7 +36,7 @@ export default {
                             <div class="cart-card-counter">
                                 <button @click="store.removeItem(item.id)" :class="store.isItemInCart[index] == false ? 'inactive' : ''"><font-awesome-icon :icon="['fas', 'minus']" /></button>
                                 <div class="price">&euro; &nbsp;{{ item.price }}</div>
-                                <button @click="store.addToCart(item.id, item.price, items.length, index)"><font-awesome-icon :icon="['fas', 'plus']" /></button>
+                                <button @click="store.addToCart(item.id, item.name, item.price, items.length, index)"><font-awesome-icon :icon="['fas', 'plus']" /></button>
                             </div>
                         </div>
                     </div>

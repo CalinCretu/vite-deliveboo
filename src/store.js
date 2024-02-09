@@ -63,7 +63,7 @@ export const store = reactive({
   ],
   cart: [],
   isItemInCart: [],
-  addToCart(id, price, length, index) {
+  addToCart(id, name, price, length, index) {
     if (this.isItemInCart.length == 0) {
       this.fillIsItemInCart(length);
     }
@@ -74,6 +74,7 @@ export const store = reactive({
         quantity: 1,
         item_price: price,
         list_index: index,
+        item_name: name
       });
       this.isItemInCart[this.cart[this.cart.length - 1].list_index] = true;
     }
