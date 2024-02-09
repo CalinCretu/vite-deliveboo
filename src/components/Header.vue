@@ -110,6 +110,9 @@
                         <button>+</button>
                     </div>
                 </div>
+                <div class="cart-total">
+                    € totale
+                </div>
             </div>
         </div>
     </header>
@@ -222,15 +225,11 @@ header {
             font-size: 22px;
 
         }
-
-
-
     }
 
     .header-btn-group {
         display: none;
         gap: 50px;
-
     }
 
     .header-btn {
@@ -326,6 +325,15 @@ header {
                         }
                     }
                 }
+            }
+
+            .cart-total {
+                text-align: center;
+                margin: 10px;
+                padding: 10px;
+                color: white;
+                border-radius: 25px;
+                background-color: $orange;
             }
         }
     }
