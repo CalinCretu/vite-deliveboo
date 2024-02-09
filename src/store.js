@@ -68,6 +68,7 @@ export const store = reactive({
       this.fillIsItemInCart(length);
     }
     if(!this.addQuantity(id)) {
+      console.log(this.addQuantity(id));
       this.cart.push({
         item_id: id,
         quantity: 1,
@@ -86,8 +87,8 @@ export const store = reactive({
 
         return true;
       }
-      return false;
     }
+    return false;
   },
   removeItem(id) {
     for (let i = 0; i < this.cart.length; i++) {
