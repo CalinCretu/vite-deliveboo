@@ -18,7 +18,7 @@
                 </ul>
             </div>
             <ul class="list">
-                <li class="header-btn">
+                <li @click="getCartDropdown()" class="header-btn">
                     <font-awesome-icon :icon="['fab', 'opencart']" />
                 </li>
                 <li @click="getAdminBtn()" class="admin header-btn">
@@ -50,6 +50,35 @@
                 <font-awesome-icon :icon="['fas', 'xmark']" />
             </div>
         </div>
+        <transition name="slide">
+            <div v-if="dropdown" class="cart-dropdown">
+                <div @click="getCartDropdown()" class="cart-close-btn">
+                    <font-awesome-icon :icon="['fas', 'xmark']" />
+                </div>
+                <div class="cart-body">
+                    <div class="cart-card" v-for="card in 8">
+                        <div class="cart-card-name">
+                            <div>Nome del piatto</div>
+                            <div>€ 48.95</div>
+                        </div>
+                        <div class="cart-item-delete">
+                            <font-awesome-icon :icon="['fas', 'trash-can']" />
+                        </div>
+                        <div class="cart-card-counter">
+                            <button><font-awesome-icon :icon="['fas', 'minus']" /></button>
+                            <div class="counter">45</div>
+                            <button><font-awesome-icon :icon="['fas', 'plus']" /></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="cart-total">
+                    Totale: € 987654
+                </div>
+                <div class="cart-confrim">
+                    Procedi con l'ordine
+                </div>
+            </div>
+        </transition>
     </header>
 </template>
 
@@ -60,7 +89,8 @@ export default {
     data() {
         return {
             active: false,
-            headerBtn: false
+            headerBtn: false,
+            dropdown: false
         }
     },
     methods: {
@@ -71,6 +101,9 @@ export default {
         getHeaderBtn() {
             this.headerBtn = !this.headerBtn
             // console.log(this.headerBtn);
+        },
+        getCartDropdown() {
+            this.dropdown = !this.dropdown
         }
     }
 }
@@ -165,7 +198,6 @@ header {
     .header-btn-group {
         display: none;
         gap: 50px;
-
     }
 
     .header-btn {
@@ -178,6 +210,169 @@ header {
             // color: $orange;
             background-color: $orange;
             cursor: pointer;
+        }
+    }
+
+    .slide-enter-active,
+    .slide-leave-active {
+        transition: 0.3s ease;
+        // transform: translateY(100%);
+        /* Durata e curva di transizione */
+    }
+
+    .slide-enter,
+    .slide-leave-to
+
+    /* .slide-leave-active in Vue 2.1.8+ */
+        {
+        transform: translateY(-100%);
+        /* Posizione iniziale per la transizione */
+    }
+
+    .cart-dropdown {
+        position: fixed;
+        right: 40px;
+        top: 90px;
+        width: 300px;
+        background-color: $linen;
+        border-radius: 25px;
+        color: black;
+        display: flex;
+        flex-direction: column;
+
+        .cart-close-btn {
+            font-size: 18px;
+            align-self: flex-end;
+            margin: 10px 10px 0px 0px;
+            font-size: 2rem;
+            background-color: $linen;
+            border-radius: 50px;
+            width: 50px;
+            aspect-ratio: 1/1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 250ms linear;
+
+            &:hover {
+                color: $linen;
+                background-color: $orange;
+                rotate: 90deg;
+                cursor: pointer;
+            }
+
+            &:active {
+                background-color: $linen;
+                color: $orange;
+            }
+        }
+
+        .cart-body {
+            overflow: auto;
+            max-width: 800px;
+            height: 60vh;
+            padding: 18px;
+
+            .cart-card {
+                position: relative;
+                // border-bottom: 1px solid rgba($orange, 0.5);
+                padding: 15px 10px;
+                margin-bottom: 15px;
+                background-color: rgba($orange, 0.2);
+                border-radius: 25px;
+
+                .cart-card-name {
+                    font-size: 18px;
+                    display: flex;
+                    justify-content: space-between;
+                }
+
+                .cart-item-delete {
+                    background-color: red;
+                    position: absolute;
+                    right: 8px;
+                    bottom: 8px;
+                    color: $linen;
+                    border-radius: 50px;
+                    aspect-ratio: 1/1;
+                    width: 30px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: 100ms linear;
+
+                    &:hover {
+                        transform: scale(1.1);
+                        cursor: pointer;
+                    }
+
+                    &:active {
+                        transform: scale(1);
+                    }
+                }
+
+                .cart-card-counter {
+                    display: flex;
+                    gap: 10px;
+                    margin-top: 20px;
+
+                    .counter {
+                        background-color: $orange;
+                        padding: 0px 15px;
+                        border-radius: 25px;
+                        color: white;
+                    }
+
+                    button {
+                        background-color: $orange;
+                        color: $linen;
+                        border-radius: 50px;
+                        aspect-ratio: 1/1;
+                        width: 20px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        transition: 100ms linear;
+                        cursor: pointer;
+
+                        &:hover {
+                            background-color: $orange;
+                        }
+
+                        &:active {
+                            background-color: white;
+                            color: $orange;
+                        }
+                    }
+                }
+            }
+        }
+
+        .cart-total {
+            text-align: start;
+            margin: 10px;
+            padding: 10px;
+            color: black;
+            border-radius: 25px;
+            background-color: $white;
+        }
+
+        .cart-confrim {
+            text-align: center;
+            margin: 0px 10px 15px;
+            padding: 10px;
+            color: white;
+            border-radius: 25px;
+            background-color: $orange;
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            &:active {
+                background-color: $linen;
+                color: black;
+            }
         }
     }
 
@@ -240,8 +435,6 @@ header {
     .btn-mobile {
         display: none;
     }
-
-
 
     header {
         .header-btn-group {
