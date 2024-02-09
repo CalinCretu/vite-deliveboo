@@ -50,6 +50,68 @@
                 <font-awesome-icon :icon="['fas', 'xmark']" />
             </div>
         </div>
+        <div class="cart-dropdown">
+            <div @click="getCartDropdown()" class="close-btn">
+                <font-awesome-icon :icon="['fas', 'xmark']" />
+            </div>
+            <div class="cart-body">
+                <div class="cart-card">
+                    <img src="../assets/img/pizzeria.jpg" alt="">
+                    <div class="cart-card-name">
+                        Nome del piatto
+                    </div>
+                    <div class="cart-card-counter">
+                        <button>-</button>
+                        <div class="counter">45</div>
+                        <button>+</button>
+                    </div>
+                </div>
+                <div class="cart-card">
+                    <img src="../assets/img/pizzeria.jpg" alt="">
+                    <div class="cart-card-name">
+                        Nome del piatto
+                    </div>
+                    <div class="cart-card-counter">
+                        <button>-</button>
+                        <div class="counter">45</div>
+                        <button>+</button>
+                    </div>
+                </div>
+                <div class="cart-card">
+                    <img src="../assets/img/pizzeria.jpg" alt="">
+                    <div class="cart-card-name">
+                        Nome del piatto
+                    </div>
+                    <div class="cart-card-counter">
+                        <button>-</button>
+                        <div class="counter">45</div>
+                        <button>+</button>
+                    </div>
+                </div>
+                <div class="cart-card">
+                    <img src="../assets/img/pizzeria.jpg" alt="">
+                    <div class="cart-card-name">
+                        Nome del piatto
+                    </div>
+                    <div class="cart-card-counter">
+                        <button>-</button>
+                        <div class="counter">45</div>
+                        <button>+</button>
+                    </div>
+                </div>
+                <div class="cart-card">
+                    <img src="../assets/img/pizzeria.jpg" alt="">
+                    <div class="cart-card-name">
+                        Nome del piatto
+                    </div>
+                    <div class="cart-card-counter">
+                        <button>-</button>
+                        <div class="counter">45</div>
+                        <button>+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
 </template>
 
@@ -160,6 +222,9 @@ header {
             font-size: 22px;
 
         }
+
+
+
     }
 
     .header-btn-group {
@@ -178,6 +243,90 @@ header {
             // color: $orange;
             background-color: $orange;
             cursor: pointer;
+        }
+    }
+
+    .cart-dropdown {
+        position: fixed;
+        right: 40px;
+        top: 90px;
+        width: 300px;
+        background-color: $linen;
+        border-radius: 25px;
+
+        .close-btn {
+            font-size: 18px;
+            width: 36px;
+            z-index: 2;
+        }
+
+        .cart-body {
+            overflow: auto;
+            max-height: 600px;
+
+            .cart-card {
+
+                display: flex;
+                justify-content: start;
+                position: relative;
+
+                img {
+                    width: 250px;
+                    object-fit: contain;
+                    border-radius: 25px;
+                    margin: 20px;
+                }
+
+                .cart-card-name {
+                    position: absolute;
+                    top: 15%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    font-size: 30px;
+                    width: 100%;
+                    text-align: center;
+                }
+
+                .cart-card-counter {
+                    display: flex;
+                    gap: 20px;
+                    position: absolute;
+                    bottom: 5%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+
+                    .counter {
+                        background-color: $orange;
+                        display: flex;
+                        align-items: center;
+                        padding: 5px 15px;
+                        border-radius: 25px;
+                    }
+
+                    button {
+                        width: 30px;
+                        height: 30px;
+                        aspect-ratio: 1;
+                        border-radius: 50%;
+                        background-color: $light-orange;
+                        color: white;
+                        font-size: 25px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+
+                        &:hover {
+                            background-color: $orange;
+                        }
+
+                        &:active {
+                            background-color: white;
+                            color: $orange;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -240,8 +389,6 @@ header {
     .btn-mobile {
         display: none;
     }
-
-
 
     header {
         .header-btn-group {
