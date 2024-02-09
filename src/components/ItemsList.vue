@@ -33,11 +33,11 @@ export default {
                                     <font-awesome-icon :icon="['fas', 'wheat-awn-circle-exclamation']" />
                                 </div>
                             </div>
-                            <div class="add-item" @click="store.addToCart(item.id, item.price, items.length, index)">
-                                <font-awesome-icon :icon="['fas', 'cart-plus']" />
+                            <div class="cart-card-counter">
+                                <button @click="store.removeItem(item.id)" :class="store.isItemInCart[index] == false ? 'inactive' : ''"><font-awesome-icon :icon="['fas', 'minus']" /></button>
                                 <div class="price">&euro; &nbsp;{{ item.price }}</div>
+                                <button @click="store.addToCart(item.id, item.price, items.length, index)"><font-awesome-icon :icon="['fas', 'plus']" /></button>
                             </div>
-                            <div @click="store.removeItem(item.id, index)">Remove</div>
                         </div>
                     </div>
                 </div>
@@ -87,13 +87,13 @@ export default {
                 height: 140px;
                 width: 360px;
                 gap: 15px;
-                border-radius: 50px;
+                border-radius: 20px;
                 transition: $transition;
                 overflow: hidden;
                 background-color: $linen;
 
                 @media (max-width: 1200px) {
-                    width: 280px;
+                    width: 300px;
                     gap: 5px;
                 }
 
@@ -116,7 +116,7 @@ export default {
                 .item-img {
                     height: 140px;
                     aspect-ratio: 1 / 1;
-                    border-radius: 50px;
+                    border-radius: 20px;
                     object-fit: cover;
                 }
 
@@ -131,6 +131,41 @@ export default {
                     .item-name {
                         font-weight: 600;
                         font-size: 16px;
+                    }
+
+                    .cart-card-counter {
+                    display: flex;
+                    gap: 10px;
+                    margin-top: 20px;
+
+                    .counter {
+                        background-color: $orange;
+                        padding: 0px 15px;
+                        border-radius: 25px;
+                        color: white;
+                    }
+
+                        button {
+                            background-color: $orange;
+                            color: $linen;
+                            border-radius: 50px;
+                            aspect-ratio: 1/1;
+                            width: 20px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            transition: 100ms linear;
+                            cursor: pointer;
+
+                            &:hover {
+                                background-color: $orange;
+                            }
+
+                            &:active {
+                                background-color: white;
+                                color: $orange;
+                            }
+                        }
                     }
 
                     .labels {
