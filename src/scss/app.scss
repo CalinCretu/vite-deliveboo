@@ -40,3 +40,9 @@ body {
     min-height: 100vh;
     font-family: 'Outfit', sans-serif;
 }
+
+.not-found {
+    grid-column: 1 / 4;
+    width: 100%;
+    text-align: center;
+}

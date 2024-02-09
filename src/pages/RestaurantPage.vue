@@ -6,22 +6,24 @@ import ItemsList from '../components/ItemsList.vue';
 export default {
     data() {
         return {
-            items: []
+            items: [],
+            restaurant: {}
         }
     },
     props: {
         slug: String,
     },
     components: {
-        // RestaurantProfile,
+        RestaurantProfile,
         ItemsList
     },
     methods: {
         fetchItems() {
             axios.get(`http://127.0.0.1:8000/api/items/${this.slug}`)
                 .then(res => {
-                    this.items = res.data
-                    console.log(res.data);
+                    this.items = res.data.results.items
+                    this.restaurant = res.data.results.user
+                    console.log(this.restaurant);
                 })
         }
     },
@@ -32,7 +34,7 @@ export default {
 </script>
 
 <template>
-    <!-- <RestaurantProfile :restaurant="restaurant" /> -->
+    <RestaurantProfile :restaurant="restaurant" />
     <ItemsList :items="items" />
 </template>
 

@@ -48,7 +48,7 @@ export default {
         <div class="container">
             <h2 class="title">Cosa vuoi mangiare?</h2>
             <input type="text" name="restaurant-name" id="restaurant-name" class="restaurant-search" placeholder="Cerca il nome di un ristorante" v-model="store.request.name"
-                @keyup.enter="fetchRestaurantsByName">
+                @keyup="fetchRestaurantsByName">
 
 
             <Categories @fetch-restaurants="fetchRestaurantsByName()" />
@@ -69,6 +69,7 @@ export default {
                         <router-link class="link" :to="{ name: 'restaurant.show', params: {slug: restaurant.slug} }">Guarda il menù</router-link>
                     </div>
                 </div>
+                <div class="not-found" v-if="restaurantsArray.length == 0">Nessun ristorante trovato</div>
             </div>
         </div>
     </section>
