@@ -61,4 +61,60 @@ export const store = reactive({
       isOn: false,
     },
   ],
+  cart: [],
+  isItemInCart: [],
+  addToCart(id, price, length, index) {
+    if (this.isItemInCart.length == 0) {
+      this.fillIsItemInCart(length);
+    }
+    if(!this.addQuantity(id)) {
+      this.cart.push({
+        item_id: id,
+        quantity: 1,
+        item_price: price,
+        list_index: index,
+      });
+      this.isItemInCart[this.cart[this.cart.length - 1].list_index] = true;
+    }
+    console.log(this.cart)
+  },
+  addQuantity(id) {
+    for (let i = 0; i < this.cart.length; i++) {
+      if (this.cart[i].item_id == id) {
+        this.cart[i].quantity++;
+        this.isItemInCart[this.cart[i].list_index] = true;
+
+        return true;
+      }
+      return false;
+    }
+  },
+  removeItem(id) {
+    for (let i = 0; i < this.cart.length; i++) {
+      if (this.cart[i].item_id == id) {
+        this.cart[i].quantity--;
+        if (this.cart[i].quantity == 0) {
+          this.isItemInCart[this.cart[i].list_index] = false;
+          this.cart.splice(i, 1);
+        }
+
+        return true;
+      }
+    }
+    console.log(this.cart);
+  },
+  deleteItem(id) {
+    for (let i = 0; i < this.cart.length; i++) {
+      if (this.cart[i].item_id == id) {
+        this.isItemInCart[this.cart[i].list_index] = false;
+        this.cart.splice(i, 1);
+        return true;
+      }
+    }
+  },
+  fillIsItemInCart(length) {
+    for (let i = 0; i < length; i++) {
+      this.isItemInCart[i] = false;
+    }
+  },
 });

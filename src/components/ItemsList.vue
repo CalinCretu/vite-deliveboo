@@ -1,39 +1,43 @@
 <script>
+import { store } from '../store';
 export default {
+    data() {
+        return {
+            store: store,
+        }
+    },
     props: {
         items: Array
-    }
+    },
 }
 </script>
-
 
 <template>
     <section class="items-list">
         <div class="container">
             <div class="menu-title">Menu</div>
             <div class="row">
-                <div class="col-card" v-for="item in items">
-                    <div class="card">
+                <div class="col-card" v-for="(item, index) in items">
+                    <div class="card" :class="store.isItemInCart[index] == true ? 'in-cart' : ''">
                         <img class="item-img" :src="`http://127.0.0.1:8000/storage/${item.item_img}`" alt="">
-                        <div class="item-name">{{ item.name }}</div>
-                        <div class="item-text">{{ item.description }}</div>
-                        <div class="labels">
-                            <div class="label spicy" v-show="item.is_spicy">
-                                <font-awesome-icon :icon="['fas', 'pepper-hot']" />
-                                Piccante
+                        <div class="item-info">
+                            <div class="item-name">{{ item.name }}</div>
+                            <div class="labels">
+                                <div class="label spicy" v-show="item.is_spicy">
+                                    <font-awesome-icon :icon="['fas', 'pepper-hot']" />
+                                </div>
+                                <div class="label veg" v-show="item.is_vegan">
+                                    <font-awesome-icon :icon="['fas', 'seedling']" />
+                                </div>
+                                <div class="label gf" v-show="item.is_gluten_free">
+                                    <font-awesome-icon :icon="['fas', 'wheat-awn-circle-exclamation']" />
+                                </div>
                             </div>
-                            <div class="label veg" v-show="item.is_vegan">
-                                <font-awesome-icon :icon="['fas', 'seedling']" />
-                                Vegano
+                            <div class="add-item" @click="store.addToCart(item.id, item.price, items.length, index)">
+                                <font-awesome-icon :icon="['fas', 'cart-plus']" />
+                                <div class="price">&euro; &nbsp;{{ item.price }}</div>
                             </div>
-                            <div class="label gf" v-show="item.is_gluten_free">
-                                <font-awesome-icon :icon="['fas', 'wheat-awn-circle-exclamation']" />
-                                Senza Glutine
-                            </div>
-                        </div>
-                        <div class="add-item">
-                            <font-awesome-icon :icon="['fas', 'cart-plus']" />
-                            <div class="price">&euro; &nbsp;{{ item.price }}</div>
+                            <div @click="store.removeItem(item.id, index)">Remove</div>
                         </div>
                     </div>
                 </div>
@@ -73,14 +77,15 @@ export default {
                 flex-basis: 100%;
             }
 
+            .in-cart {
+                border: 3px solid $orange;
+            }
+
             .card {
                 display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                padding: 20px 0;
-                aspect-ratio: 1 / 1;
-                width: 350px;
+                // align-items: center;
+                height: 140px;
+                width: 360px;
                 gap: 15px;
                 border-radius: 50px;
                 transition: $transition;
@@ -99,82 +104,87 @@ export default {
 
                 &:hover {
                     box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
-                    transform: scale(1.05);
+                    // transform: scale(1.05);
+                    // height: 100%;
+                    // padding: 10px 0;
 
-                    .item-text {
-                        display: block;
+                    .item-img {
+                        transform: scale(1.05);
                     }
                 }
 
                 .item-img {
-                    height: 150px;
+                    height: 140px;
                     aspect-ratio: 1 / 1;
                     border-radius: 50px;
                     object-fit: cover;
                 }
 
-                .item-name {
-                    font-weight: 600;
-                    font-size: 18px;
-                    flex-grow: 1;
-                }
-
-                .item-text {
-                    font-size: 12px;
-                    display: none;
-                    flex-grow: 2;
-                }
-
-                .labels {
-                    display: flex;
-                    justify-content: center;
-                    gap: 10px;
+                .item-info {
                     width: 100%;
-
-                    .label {
-                        border-radius: 999px;
-                        border: 1px solid black;
-                        padding: 0 5px;
-                        line-height: 30px;
-                        font-size: 10px;
-                    }
-
-                    .spicy {
-                        color: red;
-                        border-color: red;
-                    }
-
-                    .veg {
-                        color: green;
-                        border-color: green;
-                    }
-
-                    .gf {
-                        color: darkgoldenrod;
-                        border-color: darkgoldenrod;
-                    }
-                }
-
-                .add-item {
                     display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    background-color: $orange;
-                    color: white;
-                    font-weight: 600;
-                    padding: 0 15px;
-                    line-height: 30px;
-                    border-radius: 999px;
-                    cursor: pointer;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 5px;
+                    padding: 10px 10px 20px;
 
-                    &:hover {
-                        background-color: $linen;
-                        color: $orange;
-                        border: 1px solid $orange;
+                    .item-name {
+                        font-weight: 600;
+                        font-size: 16px;
                     }
 
-                    &:active {
-                        transform: scale(0.9);
+                    .labels {
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                        width: 100%;
+                        flex-grow: 1;
+
+                        .label {
+                            border-radius: 999px;
+                            border: 1px solid black;
+                            padding: 3px 10px;
+                            line-height: 15px;
+                            font-size: 10px;
+                        }
+
+                        .spicy {
+                            color: red;
+                            border-color: red;
+                        }
+
+                        .veg {
+                            color: green;
+                            border-color: green;
+                        }
+
+                        .gf {
+                            color: darkgoldenrod;
+                            border-color: darkgoldenrod;
+                        }
+                    }
+
+                    .add-item {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        background-color: $orange;
+                        color: white;
+                        font-weight: 600;
+                        padding: 0 15px;
+                        line-height: 30px;
+                        border-radius: 999px;
+                        cursor: pointer;
+
+                        &:hover {
+                            background-color: $linen;
+                            color: $orange;
+                            border: 1px solid $orange;
+                        }
+
+                        &:active {
+                            transform: scale(0.9);
+                        }
                     }
                 }
             }
