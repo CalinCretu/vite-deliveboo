@@ -25,6 +25,12 @@ import {
   faXmark,
   faBarsStaggered,
   faRightLong,
+  faPepperHot,
+  faSeedling,
+  faWheatAwnCircleExclamation,
+  faCartPlus,
+  faLocationDot,
+  faEnvelope
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faUser,
@@ -67,7 +73,13 @@ library.add(
   faOpencart,
   faXmark,
   faBarsStaggered,
-  faRightLong
+  faRightLong,
+  faPepperHot,
+  faSeedling,
+  faWheatAwnCircleExclamation,
+  faCartPlus,
+  faLocationDot,
+  faEnvelope
 );
 
 createApp(App)
