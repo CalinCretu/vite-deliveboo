@@ -30,12 +30,15 @@ import {
   faWheatAwnCircleExclamation,
   faCartPlus,
   faLocationDot,
-  faEnvelope
+  faEnvelope,
+  faTrashCan,
+  faMinus,
+  faPlus
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faUser,
   faHeart,
-  faCirclePlay,
+  faCirclePlay
 } from "@fortawesome/free-regular-svg-icons";
 import {
   faOpencart,
@@ -79,7 +82,10 @@ library.add(
   faWheatAwnCircleExclamation,
   faCartPlus,
   faLocationDot,
-  faEnvelope
+  faEnvelope,
+  faTrashCan,
+  faMinus,
+  faPlus
 );
 
 createApp(App)
