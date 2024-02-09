@@ -47,13 +47,16 @@ export default {
     <section class="restaurants-list" id="restaurants-list">
         <div class="container">
             <h2 class="title">Cosa vuoi mangiare?</h2>
-            <input type="text" name="restaurant-name" id="restaurant-name" class="restaurant-search" placeholder="Cerca il nome di un ristorante" v-model="store.request.name"
-                @keyup="fetchRestaurantsByName">
+            <div class="search">
+                <input type="text" name="restaurant-name" id="restaurant-name" class="restaurant-search" placeholder="Cerca il nome di un ristorante" v-model="store.request.name"
+                    @keyup="fetchRestaurantsByName">
+                
+                    <button class="btn" @click="resetFilter()">Reset</button>
+            </div>
 
 
             <Categories @fetch-restaurants="fetchRestaurantsByName()" />
             <!-- <button class="btn">Cerca</button> -->
-            <button class="btn" @click="resetFilter()">Reset</button>
 
             <div class="grid">
                 <div class="restaurant-card" v-for="restaurant in restaurantsArray">
@@ -88,15 +91,23 @@ section.restaurants-list {
         margin-bottom: 2rem;
     }
 
+    .search {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
     .btn {
         display: block;
         background-color: $orange;
         color: $white;
-        padding: 1rem 2rem;
+        padding: 0.5rem 2rem;
         font-size: 1rem;
         border-radius: 5rem;
         cursor: pointer;
-        margin-inline: auto;
+        // margin-inline: auto;
     }
 
     input.restaurant-search {
@@ -104,13 +115,13 @@ section.restaurants-list {
         width: min(500px, 100%);
         outline: none;
         color: $charcoal;
-        margin-inline: auto;
+        // margin-inline: auto;
         border: 1px solid $silver;
         padding: 0.5rem;
         border-radius: 0.5rem;
         font-size: 1rem;
         font-family: 'Outfit', sans-serif;
-        margin-bottom: 2rem;
+        // margin-bottom: 2rem;
         &:focus {
             border-color: $orange;
         }
