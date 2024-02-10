@@ -18,7 +18,7 @@ export default {
             <div class="menu-title">Menu</div>
             <div class="row">
                 <div class="col-card" v-for="(item, index) in items">
-                    <div class="card" :class="store.isItemInCart[index] == true ? 'in-cart' : ''">
+                    <div class="card" :class="store.returnQty(item.id) > 0 ? 'in-cart' : ''">
                         <img class="item-img" :src="`http://127.0.0.1:8000/storage/${item.item_img}`" alt="">
                         <div class="item-info">
                             <div class="item-name">{{ item.name }}</div>
@@ -34,9 +34,14 @@ export default {
                                 </div>
                             </div>
                             <div class="cart-card-counter">
-                                <button @click="store.removeItem(item.id)" :class="store.isItemInCart[index] == false ? 'inactive' : ''"><font-awesome-icon :icon="['fas', 'minus']" /></button>
+                                <button @click="store.removeItem(item.id)"
+                                    v-show="store.returnQty(item.id) > 0"><font-awesome-icon
+                                        :icon="['fas', 'minus']" /></button>
                                 <div class="price">&euro; &nbsp;{{ item.price }}</div>
-                                <button @click="store.addToCart(item.id, item.name, item.price, items.length, index)"><font-awesome-icon :icon="['fas', 'plus']" /></button>
+                                <button
+                                    @click="store.addToCart(item.id, item.name, item.price, items.length, index)"><font-awesome-icon
+                                        :icon="['fas', 'plus']" /></button>
+                                <div class="quantity" v-show="store.returnQty(item.id) > 0">X {{ store.returnQty(item.id) }}</div>
                             </div>
                         </div>
                     </div>
@@ -134,16 +139,29 @@ export default {
                     }
 
                     .cart-card-counter {
-                    display: flex;
-                    gap: 10px;
-                    margin-top: 20px;
+                        display: flex;
+                        gap: 10px;
+                        margin-top: 20px;
+                        align-items: center;
 
-                    .counter {
-                        background-color: $orange;
-                        padding: 0px 15px;
-                        border-radius: 25px;
-                        color: white;
-                    }
+                        @media (max-width: 1200px) {
+                                gap: 5px;;
+                            }
+
+                        .price {
+                            font-weight: 600;
+                            font-size: 0.9rem;
+
+                            @media (max-width: 1200px) {
+                                font-size: 0.8rem;
+                            }
+                        }
+
+                        .quantity {
+                            font-size: 0.8rem;
+                            font-weight: 600;
+                            color: $orange;
+                        }
 
                         button {
                             background-color: $orange;
@@ -225,5 +243,9 @@ export default {
             }
         }
     }
+}
+
+.inactive {
+    display: none;
 }
 </style>

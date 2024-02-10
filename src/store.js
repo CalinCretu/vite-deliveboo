@@ -62,30 +62,22 @@ export const store = reactive({
     },
   ],
   cart: [],
-  isItemInCart: [],
-  addToCart(id, name, price, length, index) {
-    if (this.isItemInCart.length == 0) {
-      this.fillIsItemInCart(length);
-    }
-    if(!this.addQuantity(id)) {
+  addToCart(id, name, price, index) {
+    if (!this.addQuantity(id)) {
       console.log(this.addQuantity(id));
       this.cart.push({
         item_id: id,
         quantity: 1,
         item_price: price,
-        list_index: index,
-        item_name: name
+        item_name: name,
       });
-      this.isItemInCart[this.cart[this.cart.length - 1].list_index] = true;
     }
-    console.log(this.cart)
+    console.log(this.cart);
   },
   addQuantity(id) {
     for (let i = 0; i < this.cart.length; i++) {
       if (this.cart[i].item_id == id) {
         this.cart[i].quantity++;
-        this.isItemInCart[this.cart[i].list_index] = true;
-
         return true;
       }
     }
@@ -96,7 +88,6 @@ export const store = reactive({
       if (this.cart[i].item_id == id) {
         this.cart[i].quantity--;
         if (this.cart[i].quantity == 0) {
-          this.isItemInCart[this.cart[i].list_index] = false;
           this.cart.splice(i, 1);
         }
 
@@ -108,15 +99,34 @@ export const store = reactive({
   deleteItem(id) {
     for (let i = 0; i < this.cart.length; i++) {
       if (this.cart[i].item_id == id) {
-        this.isItemInCart[this.cart[i].list_index] = false;
         this.cart.splice(i, 1);
         return true;
       }
     }
   },
-  fillIsItemInCart(length) {
-    for (let i = 0; i < length; i++) {
-      this.isItemInCart[i] = false;
+  returnQty(id) {
+    for (let i = 0; i < this.cart.length; i++) {
+      if (this.cart[i].item_id == id) {
+        return this.cart[i].quantity;
+      }
     }
+    return 0;
   },
+  calcTotal() {
+    let tot = 0;
+    this.cart.forEach(el => {
+      tot += (el.item_price * el.quantity);
+    });
+    return tot.toFixed(2);
+  },
+  calcPartial(id) {
+    let part = 0;
+    for (let i = 0; i < this.cart.length; i++) {
+      if (this.cart[i].item_id == id) {
+        part = this.cart[i].item_price * this.cart[i].quantity;
+        return part.toFixed(2);
+      }
+    }
+    return 0;
+  }
 });
