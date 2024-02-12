@@ -33,12 +33,13 @@ import {
   faEnvelope,
   faTrashCan,
   faMinus,
-  faPlus
+  faPlus,
+  faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faUser,
   faHeart,
-  faCirclePlay
+  faCirclePlay,
 } from "@fortawesome/free-regular-svg-icons";
 import {
   faOpencart,
@@ -85,7 +86,8 @@ library.add(
   faEnvelope,
   faTrashCan,
   faMinus,
-  faPlus
+  faPlus,
+  faArrowLeft
 );
 
 createApp(App)
