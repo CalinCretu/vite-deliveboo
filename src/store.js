@@ -62,17 +62,25 @@ export const store = reactive({
     },
   ],
   cart: [],
-  addToCart(id, name, price, index) {
-    if (!this.addQuantity(id)) {
-      console.log(this.addQuantity(id));
-      this.cart.push({
-        item_id: id,
-        quantity: 1,
-        item_price: price,
-        item_name: name,
-      });
+  showWarning: false,
+  currentUser: null,
+  addToCart(id, name, price, user_id) {
+    if (this.cart.length === 0)
+      this.currentUser = user_id
+    if (this.currentUser === user_id) {
+      if (!this.addQuantity(id)) {
+        console.log(this.addQuantity(id));
+        this.cart.push({
+          item_id: id,
+          quantity: 1,
+          item_price: price,
+          item_name: name,
+        });
+      }
+      console.log(this.cart);
+    } else {
+      this.showWarning = true
     }
-    console.log(this.cart);
   },
   addQuantity(id) {
     for (let i = 0; i < this.cart.length; i++) {
@@ -90,7 +98,6 @@ export const store = reactive({
         if (this.cart[i].quantity == 0) {
           this.cart.splice(i, 1);
         }
-
         return true;
       }
     }
@@ -103,6 +110,10 @@ export const store = reactive({
         return true;
       }
     }
+  },
+  emptyCart() {
+    this.cart = [];
+    this.showWarning = false
   },
   returnQty(id) {
     for (let i = 0; i < this.cart.length; i++) {

@@ -39,11 +39,35 @@ export default {
                                         :icon="['fas', 'minus']" /></button>
                                 <div class="price">&euro; &nbsp;{{ item.price }}</div>
                                 <button
-                                    @click="store.addToCart(item.id, item.name, item.price, items.length, index)"><font-awesome-icon
+                                    @click="store.addToCart(item.id, item.name, item.price, items.length, item.user_id)"><font-awesome-icon
                                         :icon="['fas', 'plus']" /></button>
-                                <div class="quantity" v-show="store.returnQty(item.id) > 0">X {{ store.returnQty(item.id) }}</div>
+                                <div class="quantity" v-show="store.returnQty(item.id) > 0">X {{ store.returnQty(item.id) }}
+                                </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-if="store.showWarning" class="bg-warning-card">
+            <div class="warning-card-body">
+                <div @click="store.showWarning = false" class="warning-close-btn">
+                    <font-awesome-icon :icon="['fas', 'xmark']" />
+                </div>
+                <div class="warning-card">
+                    <h1 class="warning-title">Attenzione!!</h1>
+                    <p class="warning-text">Puoi ordinare solo da un ristorante alla volta. Vuoi mantenere l'ordine attuale
+                        e
+                        procedere al pagamento
+                        oppure svuotare il carrello e aggiungere il nuovo piatto?
+                    </p>
+                    <div class="btn-warning">
+                        <button class="btn-confrim">
+                            Procedi al pagamento
+                        </button>
+                        <button @click="store.emptyCart" class="btn-confrim btn-delete">
+                            Svuota e Aggiungi
+                        </button>
                     </div>
                 </div>
             </div>
@@ -51,11 +75,107 @@ export default {
     </section>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @use '../scss/partials/variables' as *;
+
 
 .items-list {
     padding: 100px 0;
+
+    .bg-warning-card {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.757);
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: $orange;
+        text-align: center;
+
+        .warning-close-btn {
+            align-self: flex-end;
+            font-size: 1.2rem;
+            background-color: $orange;
+            color: $linen;
+            border-radius: 50px;
+            margin: 20px;
+            width: 35px;
+            aspect-ratio: 1/1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 250ms linear;
+
+            &:hover {
+                color: $orange;
+                background-color: $linen;
+                rotate: 90deg;
+                cursor: pointer;
+            }
+
+            &:active {
+                background-color: $orange;
+                color: $linen;
+            }
+        }
+
+        .warning-card-body {
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            padding: 80px;
+            border: 2px solid $orange;
+            border-radius: 50px;
+            padding: 20px;
+        }
+
+        .warning-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+            border-radius: 50px;
+        }
+
+        .warning-title {
+            font-size: 50px;
+        }
+
+        .warning-text {
+            font-size: 20px;
+        }
+
+        .btn-confrim {
+            text-align: center;
+            margin: 0px 10px 15px;
+            padding: 10px 15px;
+            color: white;
+            border-radius: 25px;
+            background-color: $orange;
+            transition: 250ms linear;
+
+            &:hover {
+                cursor: pointer;
+                transform: scale(1.1);
+            }
+
+            &:active {
+                background-color: $linen;
+                color: black;
+            }
+        }
+
+        .btn-delete {
+            background-color: red;
+        }
+
+
+    }
 
     .menu-title {
         text-align: center;
@@ -145,8 +265,9 @@ export default {
                         align-items: center;
 
                         @media (max-width: 1200px) {
-                                gap: 5px;;
-                            }
+                            gap: 5px;
+                            ;
+                        }
 
                         .price {
                             font-weight: 600;
