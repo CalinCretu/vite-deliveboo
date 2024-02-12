@@ -46,8 +46,11 @@ export default {
                 </ul>
             </div>
             <ul class="list">
-                <li @click="getCartDropdown()" class="header-btn">
+                <li @click="getCartDropdown()" class="header-btn cart-btn">
                     <font-awesome-icon :icon="['fab', 'opencart']" />
+                    <div class="cart-quantity" v-show="store.cart.length">
+                        {{ store.cartQuantity() }}
+                    </div>
                 </li>
                 <li @click="getAdminBtn()" class="admin header-btn">
                     <font-awesome-icon :icon="['fas', 'user-tie']" />
@@ -107,8 +110,35 @@ export default {
                 <div class="cart-confrim">
                     <router-link :to="{ name: 'checkout' }"> Procedi con l'ordine</router-link>
                 </div>
+        <div v-if="dropdown" class="cart-dropdown">
+            <div @click="getCartDropdown()" class="cart-close-btn">
+                <font-awesome-icon :icon="['fas', 'xmark']" />
             </div>
-        </transition>
+            <div class="cart-body">
+                <div class="cart-card" v-for="card in store.cart">
+                    <div class="cart-card-name">
+                        <div>{{ card.item_name }}</div>
+                        <div>€ {{ store.calcPartial(card.item_id) }}</div>
+                    </div>
+                    <div class="cart-item-delete" @click="store.deleteItem(card.item_id)">
+                        <font-awesome-icon :icon="['fas', 'trash-can']" />
+                    </div>
+                    <div class="cart-card-counter">
+                        <button @click="store.removeItem(card.item_id)"><font-awesome-icon
+                                :icon="['fas', 'minus']" /></button>
+                        <div class="counter">{{ card.quantity }}</div>
+                        <button @click="store.addQuantity(card.item_id)"><font-awesome-icon
+                                :icon="['fas', 'plus']" /></button>
+                    </div>
+                </div>
+            </div>
+            <div class="cart-total">
+                Totale: &euro; &nbsp;{{ store.calcTotal() }}
+            </div>
+            <div class="cart-confrim">
+                Procedi con l'ordine
+            </div>
+        </div>
     </header>
 </template>
 
@@ -213,6 +243,30 @@ header {
             // color: $orange;
             background-color: $orange;
             cursor: pointer;
+
+            .cart-quantity {
+                background-color: $linen;
+                color: $orange;
+            }
+        }
+    }
+
+
+    .cart-btn {
+        position: relative;
+
+        .cart-quantity {
+            position: absolute;
+            top: -8px;
+            right: -3px;
+            background-color: $orange;
+            aspect-ratio: 1/1;
+            width: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
         }
     }
 

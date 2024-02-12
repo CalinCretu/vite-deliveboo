@@ -62,17 +62,36 @@ export const store = reactive({
     },
   ],
   cart: [],
-  addToCart(id, name, price, index) {
-    if (!this.addQuantity(id)) {
-      console.log(this.addQuantity(id));
-      this.cart.push({
-        item_id: id,
-        quantity: 1,
-        item_price: price,
-        item_name: name,
-      });
+  showWarning: false,
+  currentUser: null,
+  warningUser: null,
+  warningItem: {
+    item_id: null,
+    item_name: null,
+    item_price: null,
+    quantity: 1
+  },
+  addToCart(id, name, price, user_id) {
+    if (this.cart.length === 0)
+      this.currentUser = user_id
+    if (this.currentUser === user_id) {
+      if (!this.addQuantity(id)) {
+        console.log(this.addQuantity(id));
+        this.cart.push({
+          item_id: id,
+          quantity: 1,
+          item_price: price,
+          item_name: name,
+        });
+      }
+      console.log(this.cart);
+    } else {
+      this.showWarning = true
+      this.warningItem.item_id = id
+      this.warningItem.item_name = name
+      this.warningItem.item_price = price
+      this.warningUser = user_id
     }
-    console.log(this.cart);
   },
   addQuantity(id) {
     for (let i = 0; i < this.cart.length; i++) {
@@ -90,7 +109,6 @@ export const store = reactive({
         if (this.cart[i].quantity == 0) {
           this.cart.splice(i, 1);
         }
-
         return true;
       }
     }
@@ -103,6 +121,15 @@ export const store = reactive({
         return true;
       }
     }
+  },
+  emptyCart() {
+    this.cart = [];
+    this.showWarning = false
+  },
+  emptyAdd() {
+    this.emptyCart()
+    this.cart.push(this.warningItem)
+    this.currentUser = this.warningUser
   },
   returnQty(id) {
     for (let i = 0; i < this.cart.length; i++) {
@@ -128,5 +155,12 @@ export const store = reactive({
       }
     }
     return 0;
+  },
+  cartQuantity() {
+    let tot = 0
+    for (let i = 0; i < this.cart.length; i++) {
+      tot += this.cart[i].quantity
+    }
+    return tot
   }
 });
