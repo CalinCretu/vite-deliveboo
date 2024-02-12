@@ -46,8 +46,11 @@ export default {
                 </ul>
             </div>
             <ul class="list">
-                <li @click="getCartDropdown()" class="header-btn">
+                <li @click="getCartDropdown()" class="header-btn cart">
                     <font-awesome-icon :icon="['fab', 'opencart']" />
+                    <div class="articles-numbers" v-if="store.calcTotalQuantity() > 0">
+                        {{ store.calcTotalQuantity() }}
+                    </div>
                 </li>
                 <li @click="getAdminBtn()" class="admin header-btn">
                     <font-awesome-icon :icon="['fas', 'user-tie']" />
@@ -211,6 +214,24 @@ header {
             // color: $orange;
             background-color: $orange;
             cursor: pointer;
+        }
+        &.cart {
+            position: relative;
+            .articles-numbers {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: absolute;
+                right: 0;
+                top: 0;
+                transform: translateY(-50%);
+                width: 1rem;
+                aspect-ratio: 1;
+                border-radius: 50%;
+                background-color: $orange;
+                color: $white;
+                font-size: 0.75rem;
+            }
         }
     }
 

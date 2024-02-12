@@ -114,10 +114,17 @@ export const store = reactive({
   },
   calcTotal() {
     let tot = 0;
-    this.cart.forEach(el => {
-      tot += (el.item_price * el.quantity);
+    this.cart.forEach((el) => {
+      tot += el.item_price * el.quantity;
     });
     return tot.toFixed(2);
+  },
+  calcTotalQuantity() {
+    let totQuantity = 0;
+    this.cart.forEach((el) => {
+      totQuantity += el.quantity;
+    });
+    return totQuantity;
   },
   calcPartial(id) {
     let part = 0;
@@ -128,5 +135,5 @@ export const store = reactive({
       }
     }
     return 0;
-  }
+  },
 });
