@@ -65,7 +65,7 @@ export default {
                         <button class="btn-confrim">
                             Procedi al pagamento
                         </button>
-                        <button @click="store.emptyCart" class="btn-confrim btn-delete">
+                        <button @click="store.emptyAdd()" class="btn-confrim btn-delete">
                             Svuota e Aggiungi
                         </button>
                     </div>

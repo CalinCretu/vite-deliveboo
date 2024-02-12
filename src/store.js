@@ -64,6 +64,13 @@ export const store = reactive({
   cart: [],
   showWarning: false,
   currentUser: null,
+  warningUser: null,
+  warningItem: {
+    item_id: null,
+    item_name: null,
+    item_price: null,
+    quantity: 1
+  },
   addToCart(id, name, price, user_id) {
     if (this.cart.length === 0)
       this.currentUser = user_id
@@ -80,6 +87,10 @@ export const store = reactive({
       console.log(this.cart);
     } else {
       this.showWarning = true
+      this.warningItem.item_id = id
+      this.warningItem.item_name = name
+      this.warningItem.item_price = price
+      this.warningUser = user_id
     }
   },
   addQuantity(id) {
@@ -115,6 +126,11 @@ export const store = reactive({
     this.cart = [];
     this.showWarning = false
   },
+  emptyAdd() {
+    this.emptyCart()
+    this.cart.push(this.warningItem)
+    this.currentUser = this.warningUser
+  },
   returnQty(id) {
     for (let i = 0; i < this.cart.length; i++) {
       if (this.cart[i].item_id == id) {
@@ -139,5 +155,12 @@ export const store = reactive({
       }
     }
     return 0;
+  },
+  cartQuantity() {
+    let tot = 0
+    for (let i = 0; i < this.cart.length; i++) {
+      tot += this.cart[i].quantity
+    }
+    return tot
   }
 });
