@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "./pages/HomePage.vue";
 import RestaurantPage from "./pages/RestaurantPage.vue";
 import NotFound from "./pages/404.vue";
+import Checkout from "./pages/Checkout.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -26,6 +27,11 @@ const router = createRouter({
       name: "not-found",
       component: NotFound,
     },
+    {
+      path: "/checkout",
+      name: "checkout",
+      component: Checkout,
+    }
   ],
 });
 
