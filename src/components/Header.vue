@@ -86,16 +86,18 @@ export default {
                 <div class="cart-body">
                     <div class="cart-card" v-for="card in store.cart">
                         <div class="cart-card-name">
-                            <div>{{card.item_name}}</div>
-                            <div>€ {{store.calcPartial(card.item_id)}}</div>
+                            <div>{{ card.item_name }}</div>
+                            <div>€ {{ store.calcPartial(card.item_id) }}</div>
                         </div>
                         <div class="cart-item-delete" @click="store.deleteItem(card.item_id)">
                             <font-awesome-icon :icon="['fas', 'trash-can']" />
                         </div>
                         <div class="cart-card-counter">
-                            <button @click="store.removeItem(card.item_id)"><font-awesome-icon :icon="['fas', 'minus']" /></button>
-                            <div class="counter">{{card.quantity}}</div>
-                            <button @click="store.addQuantity(card.item_id)"><font-awesome-icon :icon="['fas', 'plus']" /></button>
+                            <button @click="store.removeItem(card.item_id)"><font-awesome-icon
+                                    :icon="['fas', 'minus']" /></button>
+                            <div class="counter">{{ card.quantity }}</div>
+                            <button @click="store.addQuantity(card.item_id)"><font-awesome-icon
+                                    :icon="['fas', 'plus']" /></button>
                         </div>
                     </div>
                 </div>
@@ -103,7 +105,7 @@ export default {
                     Totale: &euro; &nbsp;{{ store.calcTotal() }}
                 </div>
                 <div class="cart-confrim">
-                    Procedi con l'ordine
+                    <router-link :to="{ name: 'checkout' }"> Procedi con l'ordine</router-link>
                 </div>
             </div>
         </transition>
