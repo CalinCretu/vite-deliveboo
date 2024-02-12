@@ -135,7 +135,7 @@ export default {
                     Totale: &euro; &nbsp;{{ store.calcTotal() }}
                 </div>
                 <div class="cart-confrim">
-                    Procedi con l'ordine
+                    <router-link :to="{ name: 'checkout' }">Procedi con l'ordine</router-link>
                 </div>
             </div>
         </div>
