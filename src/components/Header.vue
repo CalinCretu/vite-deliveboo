@@ -115,7 +115,8 @@ export default {
                 Totale: &euro; &nbsp;{{ store.calcTotal() }}
             </div>
             <div class="cart-confrim">
-                <router-link :to="{ name: 'checkout' }"> Procedi con l'ordine</router-link>
+                <router-link :to="{ name: 'checkout' }" :class="store.cart.length === 0 ? 'disable' : ''"> Procedi con
+                    l'ordine</router-link>
             </div>
             <div v-if="dropdown" class="cart-dropdown">
                 <div @click="getCartDropdown()" class="cart-close-btn">
@@ -142,8 +143,8 @@ export default {
                 <div class="cart-total">
                     Totale: &euro; &nbsp;{{ store.calcTotal() }}
                 </div>
-                <div class="cart-confrim">
-                    <router-link :to="{ name: 'checkout' }">Procedi con l'ordine</router-link>
+                <div class="cart-confrim" :class="store.cart.length === 0 ? 'disable' : ''">
+                    <router-link :to="{ name: 'checkout' }" class="proceed">Procedi con l'ordine</router-link>
                 </div>
             </div>
         </div>
@@ -276,8 +277,10 @@ header {
             justify-content: center;
             font-size: 16px;
         }
+
         &.cart {
             position: relative;
+
             .articles-numbers {
                 display: flex;
                 align-items: center;
@@ -361,18 +364,19 @@ header {
             overflow: auto;
             max-width: 800px;
             height: 60vh;
-            padding: 18px;
+            padding: 1rem;
 
             .cart-card {
                 position: relative;
                 // border-bottom: 1px solid rgba($orange, 0.5);
-                padding: 15px 10px;
+                padding: 1rem 0.75rem;
                 margin-bottom: 15px;
                 background-color: rgba($orange, 0.2);
-                border-radius: 25px;
+                border-radius: 1rem;
+                font-weight: 600;
+                font-size: 1rem;
 
                 .cart-card-name {
-                    font-size: 18px;
                     display: flex;
                     justify-content: space-between;
                 }
@@ -462,6 +466,17 @@ header {
             &:active {
                 background-color: $linen;
                 color: black;
+            }
+
+            &.disable {
+                color: $silver;
+                background-color: $light-silver;
+                cursor: not-allowed;
+
+                .proceed {
+                    cursor: not-allowed;
+                    pointer-events: none;
+                }
             }
         }
     }

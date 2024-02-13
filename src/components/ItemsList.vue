@@ -50,7 +50,8 @@ export default {
                                 <button
                                     @click="store.addToCart(item.id, item.name, item.price, items.length, index)"><font-awesome-icon
                                         :icon="['fas', 'plus']" /></button>
-                                <div class="quantity" v-show="store.returnQty(item.id) > 0">X {{ store.returnQty(item.id) }}</div>
+                                <div class="quantity" v-show="store.returnQty(item.id) > 0">X {{ store.returnQty(item.id) }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -58,21 +59,23 @@ export default {
                 <div class="cart">
                     <h4>Il tuo ordine</h4>
 
-                    <div class="cart-body" >
-                        <p v-if="store.cart.length === 0">Il tuo carrello è vuoto</p>   
+                    <div class="cart-body">
+                        <p v-if="store.cart.length === 0">Il tuo carrello è vuoto</p>
 
                         <div class="cart-card" v-for="card in store.cart">
                             <div class="cart-card-name">
-                                <div>{{card.item_name}}</div>
-                                <div>€ {{store.calcPartial(card.item_id)}}</div>
+                                <div>{{ card.item_name }}</div>
+                                <div>€ {{ store.calcPartial(card.item_id) }}</div>
                             </div>
                             <div class="cart-item-delete" @click="store.deleteItem(card.item_id)">
                                 <font-awesome-icon :icon="['fas', 'trash-can']" />
                             </div>
                             <div class="cart-card-counter">
-                                <button @click="store.removeItem(card.item_id)"><font-awesome-icon :icon="['fas', 'minus']" /></button>
-                                <div class="counter">{{card.quantity}}</div>
-                                <button @click="store.addQuantity(card.item_id)"><font-awesome-icon :icon="['fas', 'plus']" /></button>
+                                <button @click="store.removeItem(card.item_id)"><font-awesome-icon
+                                        :icon="['fas', 'minus']" /></button>
+                                <div class="counter">{{ card.quantity }}</div>
+                                <button @click="store.addQuantity(card.item_id)"><font-awesome-icon
+                                        :icon="['fas', 'plus']" /></button>
                             </div>
                         </div>
                     </div>
@@ -81,24 +84,23 @@ export default {
                         <div class="cart-total">
                             Totale: &euro; &nbsp;{{ store.calcTotal() }}
                         </div>
-
                         <div class="cart-confirm" :class="store.cart.length === 0 ? 'disable' : ''">
-                            Procedi con l'ordine
+                            <router-link :to="{ name: 'checkout' }" class="proceed">Procedi con l'ordine</router-link>
                         </div>
                     </div>
                 </div>
                 <div class="cart-mobile" :class="CartMobileOrder ? 'active' : ''">
                     <div class="title">
-                        <h4 >Il tuo ordine</h4>
-                        <font-awesome-icon :icon="['fas', 'arrow-left']" class="icon" @click="closeCartMobileOrder"/>
+                        <h4>Il tuo ordine</h4>
+                        <font-awesome-icon :icon="['fas', 'arrow-left']" class="icon" @click="closeCartMobileOrder" />
                     </div>
-                    <div class="cart-body" >
-                        <p v-if="store.cart.length === 0">Il tuo carrello è vuoto</p>   
+                    <div class="cart-body">
+                        <p v-if="store.cart.length === 0">Il tuo carrello è vuoto</p>
 
                         <div class="cart-card" v-for="card in store.cart">
                             <div class="cart-card-name">
-                                <div>{{card.item_name}}</div>
-                                <div>€ {{store.calcPartial(card.item_id)}}</div>
+                                <div>{{ card.item_name }}</div>
+                                <div>€ {{ store.calcPartial(card.item_id) }}</div>
                             </div>
 
                             <div class="cart-item-delete" @click="store.deleteItem(card.item_id)">
@@ -106,9 +108,11 @@ export default {
                             </div>
 
                             <div class="cart-card-counter">
-                                <button @click="store.removeItem(card.item_id)"><font-awesome-icon :icon="['fas', 'minus']" /></button>
-                                <div class="counter">{{card.quantity}}</div>
-                                <button @click="store.addQuantity(card.item_id)"><font-awesome-icon :icon="['fas', 'plus']" /></button>
+                                <button @click="store.removeItem(card.item_id)"><font-awesome-icon
+                                        :icon="['fas', 'minus']" /></button>
+                                <div class="counter">{{ card.quantity }}</div>
+                                <button @click="store.addQuantity(card.item_id)"><font-awesome-icon
+                                        :icon="['fas', 'plus']" /></button>
                             </div>
                         </div>
                     </div>
@@ -116,31 +120,31 @@ export default {
                         <div class="cart-total">
                             Totale: &euro; &nbsp;{{ store.calcTotal() }}
                         </div>
-                        
+
                         <div class="cart-confirm" :class="store.cart.length === 0 ? 'disable' : ''">
-                            Procedi con l'ordine
+                            <router-link :to="{ name: 'checkout' }" class="proceed">Procedi con l'ordine</router-link>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="cart-mobile-preview" :class="store.calcTotalQuantity() > 0 ? 'show' : ''">
-                   <div class="left">
-                       <div class="cart-mobile-icon">
-                        <font-awesome-icon :icon="['fab', 'opencart']" />
-                        <span class="quantity"> {{ store.calcTotalQuantity() }}</span>
-                       </div>
-                       <div class="cart-mobile-total">
+                    <div class="left">
+                        <div class="cart-mobile-icon">
+                            <font-awesome-icon :icon="['fab', 'opencart']" />
+                            <span class="quantity"> {{ store.calcTotalQuantity() }}</span>
+                        </div>
+                        <div class="cart-mobile-total">
                             &euro; &nbsp;{{ store.calcTotal() }}
                         </div>
-                   </div>
-                   <div class="right" @click="showCartMobileOrder">
-                    Vedi dettagli dell'ordine
-                   </div>
+                    </div>
+                    <div class="right" @click="showCartMobileOrder">
+                        Vedi dettagli dell'ordine
+                    </div>
 
                 </div>
-                
+
             </div>
-           
+
         </div>
         <div v-if="store.showWarning" class="bg-warning-card">
             <div class="warning-card-body">
@@ -182,7 +186,7 @@ export default {
         left: 0;
         right: 0;
         background-color: rgba(0, 0, 0, 0.757);
-        z-index: 2;
+        z-index: 3;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -292,21 +296,22 @@ export default {
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             grid-template-rows: repeat(auto-fill, 140px);
             gap: 2rem;
+
             .card {
-            display: flex;
-            height: 140px;
-            gap: 15px;
-            border-radius: 1rem;
-            transition: $transition;
-            overflow: hidden;
-            background-color: $linen;
+                display: flex;
+                height: 140px;
+                gap: 15px;
+                border-radius: 1rem;
+                transition: $transition;
+                overflow: hidden;
+                background-color: $linen;
 
-            &.in-cart {
-                border: 3px solid $orange;
-            }
+                &.in-cart {
+                    border: 3px solid $orange;
+                }
 
 
-            &:hover {
+                &:hover {
                     box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
                     // transform: scale(1.05);
                     // height: 100%;
@@ -345,8 +350,9 @@ export default {
                         align-items: center;
 
                         @media (max-width: 1200px) {
-                                gap: 5px;;
-                            }
+                            gap: 5px;
+                            ;
+                        }
 
                         .price {
                             font-weight: 600;
@@ -440,7 +446,7 @@ export default {
                         }
                     }
                 }
-    }
+            }
 
 
         }
@@ -453,21 +459,36 @@ export default {
         background-color: $linen;
         border-radius: 1rem;
         padding: 1rem;
+        max-height: 70vh;
 
-        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgb(255, 191, 72);
+            border-radius: 50px;
+
+            &:hover {
+                background: $orange;
+                width: 25px;
+            }
+        }
+
         h4 {
             text-align: center;
             font-size: 1.5rem;
             margin-bottom: 1rem;
         }
+
         .pay {
-            margin-top: auto; 
+            margin-top: auto;
             // position: absolute;
             // inset: auto 1rem 1rem 1rem;
             // width: 100%;
         }
 
-        @media (min-width:768px){
+        @media (min-width:768px) {
             display: flex;
         }
     }
@@ -484,14 +505,17 @@ export default {
         background-color: $linen;
         padding: 1rem;
         transition: $transition;
+
         &.active {
             transform: translateX(0);
         }
+
         .title {
             text-align: center;
             font-size: 1.5rem;
             margin-bottom: 1rem;
             position: relative;
+
             .icon {
                 position: absolute;
                 left: 0;
@@ -500,6 +524,7 @@ export default {
                 cursor: pointer;
             }
         }
+
         .pay {
             margin-top: auto;
         }
@@ -522,161 +547,172 @@ export default {
         @media (min-width:768px) {
             display: none;
         }
+
         &.show {
             transform: translateY(0);
         }
+
         .left {
             display: flex;
             align-items: center;
             gap: 1rem;
 
             .cart-mobile-icon {
-            position: relative;
-            font-size: 1.75rem;
-            .quantity {
-                position: absolute;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                top: 0;
-                right: 0;
-                transform: translateY(-50%);
-                width: 1rem;
-                aspect-ratio: 1;
-                background-color: $white;
-                color: $orange;
-                font-size: 0.75rem;
-                border-radius: 50%;
+                position: relative;
+                font-size: 1.75rem;
+
+                .quantity {
+                    position: absolute;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    top: 0;
+                    right: 0;
+                    transform: translateY(-50%);
+                    width: 1rem;
+                    aspect-ratio: 1;
+                    background-color: $white;
+                    color: $orange;
+                    font-size: 0.75rem;
+                    border-radius: 50%;
+                }
             }
-            }
+
             .cart-mobile-total {
                 font-weight: 600;
                 font-size: 1.125rem;
             }
         }
+
         .right {
             cursor: pointer;
         }
-        
+
     }
 
-   
+
 
     .cart-body {
-            overflow: auto;
-            p {
-                text-align: center;
+        overflow: auto;
+
+        p {
+            text-align: center;
+        }
+
+        .cart-card {
+            position: relative;
+            // border-bottom: 1px solid rgba($orange, 0.5);
+            padding: 1rem 0.75rem;
+            margin-bottom: 15px;
+            background-color: rgba($orange, 0.2);
+            border-radius: 1rem;
+
+            .cart-card-name {
+                font-size: 1rem;
+                font-weight: 600;
+                display: flex;
+                justify-content: space-between;
             }
 
-            .cart-card {
-                position: relative;
-                // border-bottom: 1px solid rgba($orange, 0.5);
-                padding: 1rem 0.75rem;
-                margin-bottom: 15px;
-                background-color: rgba($orange, 0.2);
-                border-radius: 1rem;
+            .cart-item-delete {
+                background-color: red;
+                position: absolute;
+                right: 8px;
+                bottom: 8px;
+                color: $linen;
+                border-radius: 50px;
+                aspect-ratio: 1/1;
+                width: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: 100ms linear;
 
-                .cart-card-name {
-                    font-size: 1rem;
-                    font-weight: 600;
-                    display: flex;
-                    justify-content: space-between;
+                &:hover {
+                    transform: scale(1.1);
+                    cursor: pointer;
                 }
 
-                .cart-item-delete {
-                    background-color: red;
-                    position: absolute;
-                    right: 8px;
-                    bottom: 8px;
+                &:active {
+                    transform: scale(1);
+                }
+            }
+
+            .cart-card-counter {
+                display: flex;
+                gap: 10px;
+                margin-top: 20px;
+
+                .counter {
+                    background-color: $orange;
+                    padding: 0px 15px;
+                    border-radius: 25px;
+                    color: white;
+                    font-weight: 600;
+                    font-size: 1rem;
+                }
+
+                button {
+                    background-color: $orange;
                     color: $linen;
                     border-radius: 50px;
                     aspect-ratio: 1/1;
-                    width: 30px;
+                    width: 20px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     transition: 100ms linear;
+                    cursor: pointer;
 
                     &:hover {
-                        transform: scale(1.1);
-                        cursor: pointer;
+                        background-color: $orange;
                     }
 
                     &:active {
-                        transform: scale(1);
-                    }
-                }
-
-                .cart-card-counter {
-                    display: flex;
-                    gap: 10px;
-                    margin-top: 20px;
-
-                    .counter {
-                        background-color: $orange;
-                        padding: 0px 15px;
-                        border-radius: 25px;
-                        color: white;
-                        font-weight: 600;
-                        font-size: 1rem;
-                    }
-
-                    button {
-                        background-color: $orange;
-                        color: $linen;
-                        border-radius: 50px;
-                        aspect-ratio: 1/1;
-                        width: 20px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        transition: 100ms linear;
-                        cursor: pointer;
-
-                        &:hover {
-                            background-color: $orange;
-                        }
-
-                        &:active {
-                            background-color: white;
-                            color: $orange;
-                        }
+                        background-color: white;
+                        color: $orange;
                     }
                 }
             }
         }
+    }
 
-        .cart-total {
-            text-align: start;
-            margin-bottom: 1rem;
-            padding: 10px;
+    .cart-total {
+        text-align: start;
+        margin-bottom: 1rem;
+        padding: 10px;
+        color: black;
+        border-radius: 25px;
+        background-color: $white;
+    }
+
+    .cart-confirm {
+        text-align: center;
+
+        padding: 10px;
+        color: white;
+        border-radius: 25px;
+        background-color: $orange;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &:active {
+            background-color: $linen;
             color: black;
-            border-radius: 25px;
-            background-color: $white;
         }
+        &.disable {
+            color: $silver;
+            background-color: $light-silver;
+            cursor: not-allowed;
 
-        .cart-confirm { 
-            text-align: center;
-            
-            padding: 10px;
-            color: white;
-            border-radius: 25px;
-            background-color: $orange;
-
-            &:hover {
-                cursor: pointer;
-            }
-            &.disable {
-                color: $silver;
-                background-color: $light-silver;
+            .proceed {
                 cursor: not-allowed;
-            }
-
-            &:active {
-                background-color: $linen;
-                color: black;
+                pointer-events: none; 
             }
         }
+    }
 
     .row {
         display: flex;
@@ -721,7 +757,7 @@ export default {
                     gap: 12px;
                 }
 
-                
+
 
                 &:hover {
                     box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;

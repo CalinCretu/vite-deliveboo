@@ -43,7 +43,7 @@ export default {
     position: relative;
 
     .hero-img {
-        height: 50vh;
+        height: 60vh;
         width: 100%;
         object-fit: cover;
     }
@@ -62,7 +62,7 @@ export default {
         align-items: center;
         color: white;
         gap: 1rem;
-        z-index: 999;
+        z-index: 2;
 
         @media (max-width: 1200px) {
             width: 50%;
