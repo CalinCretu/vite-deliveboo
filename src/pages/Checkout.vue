@@ -35,23 +35,27 @@ export default {
           let options = {
             client: clientInstance,
             styles: {
-              input: {
-                'font-size': '14px',
-                'font-family': 'Outfit'
-              }
+              'input': {
+                'font-size': '16px',
+                'font-family': 'sans-serif',
+                'border': '1px solid #666',
+                'padding-left': '1rem',
+                'backgroud-color': 'red'
+              },
+              
             },
             fields: {
               number: {
                 selector: '#creditCardNumber',
-                placeholder: 'Inserici Numero Carta'
+                placeholder: ''
               },
               cvv: {
                 selector: '#cvv',
-                placeholder: 'Enter CVV'
+                placeholder: ''
               },
               expirationDate: {
                 selector: '#expireDate',
-                placeholder: '00 / 0000'
+                placeholder: ''
               }
             }
           }
@@ -67,42 +71,44 @@ export default {
     },
   },
   mounted() {
-    braintree.client.create({
-      authorization: "sandbox_fwwypyc6_txrv7qdk3dghrytf"
-    })
-      .then(clientInstance => {
-        let options = {
-          client: clientInstance,
-          styles: {
-            input: {
-              'font-size': '14px',
-              'font-family': 'Open Sans'
-            }
-          },
-          fields: {
-            number: {
-              selector: '#creditCardNumber',
-              placeholder: 'Inserici Numero Carta'
-            },
-            cvv: {
-              selector: '#cvv',
-              placeholder: 'Enter CVV'
-            },
-            expirationDate: {
-              selector: '#expireDate',
-              placeholder: '00 / 0000'
-            }
-          }
-        }
-        return braintree.hostedFields.create(options)
-      })
-      .then(hostedFieldInstance => {
-        // @TODO - Use hostedFieldInstance to send data to Braintree
-        this.hostedFieldInstance = hostedFieldInstance;
-      })
-      .catch(err => {
 
-      });
+    this.createBraintree();
+    // braintree.client.create({
+    //   authorization: "sandbox_fwwypyc6_txrv7qdk3dghrytf"
+    // })
+    //   .then(clientInstance => {
+    //     let options = {
+    //       client: clientInstance,
+    //       styles: {
+    //         input: {
+    //           'font-size': '14px',
+    //           'font-family': 'Open Sans'
+    //         }
+    //       },
+    //       fields: {
+    //         number: {
+    //           selector: '#creditCardNumber',
+    //           placeholder: 'Inserici Numero Carta'
+    //         },
+    //         cvv: {
+    //           selector: '#cvv',
+    //           placeholder: 'Enter CVV'
+    //         },
+    //         expirationDate: {
+    //           selector: '#expireDate',
+    //           placeholder: '00 / 0000'
+    //         }
+    //       }
+    //     }
+    //     return braintree.hostedFields.create(options)
+    //   })
+    //   .then(hostedFieldInstance => {
+    //     // @TODO - Use hostedFieldInstance to send data to Braintree
+    //     this.hostedFieldInstance = hostedFieldInstance;
+    //   })
+    //   .catch(err => {
+
+    //   });
   }
 }
 </script>
@@ -110,46 +116,56 @@ export default {
 <template>
   <div class="container">
     <div class="col-sx">
-      <div class="card-header">Inserisci i dati richiesti per procedere con il pagamento</div>
+      
       <div class="card-body">
+        <div class="card-header">Inserisci i dati richiesti per procedere con il pagamento</div>
         <form>
-          <label for="nome">Nome</label>
-          <input placeholder="Inserisci il tuo Nome" type="text" id="nome" name="nome" required>
-
-          <label for="mail">Email</label>
-          <input placeholder="Inserisci la tua Mail" type="email" id="mail" name="mail" required>
-
-          <label for="telefono">Telefono</label>
-          <input placeholder="Inserisci numero di telefono" type="tel" id="telefono" name="telefono" required>
-
-          <label for="dettagli_ordine">Dettagli Ordine</label>
-          <textarea placeholder="Inserisci dettagli aggiuntivi" id="dettagli_ordine" name="dettagli_ordine" rows="2"
-            cols="50" required></textarea>
-
-          <label for="indirizzo">Indirizzo</label>
-          <textarea placeholder="Inserisci l'indirizzo di consegna" id="indirizzo" name="indirizzo" rows="2" cols="50"
-            required></textarea>
-
           <div class="form-group">
-            <label>Carta di Credito</label>
-            <div id="creditCardNumber" class="form-control"></div>
+            <input type="text" id="nome" name="nome" placeholder="&nbsp" required>
+            <label for="nome">Nome</label>
           </div>
+
           <div class="form-group">
-            <div class="row">
-              <div class="col-6">
-                <label for="expireDate">Data di scadenza</label>
+            <input type="email" id="mail" name="mail" placeholder="&nbsp" required>
+            <label for="mail">Email</label>
+          </div>
+
+          <div class="form-group">
+            <input type="tel" id="telefono" name="telefono" placeholder="&nbsp" required>
+            <label for="telefono">Telefono</label>
+          </div>
+
+          <div class="form-group">
+            <textarea id="dettagli_ordine" name="dettagli_ordine" rows="2"
+            cols="50" placeholder="&nbsp" required></textarea>
+            <label for="dettagli_ordine">Richieste aggiuntive</label>
+          </div>
+
+          <div class="form-group">
+            <textarea id="indirizzo" name="indirizzo" rows="2" cols="50"
+            placeholder="&nbsp" required></textarea>
+            <label for="indirizzo">Indirizzo di consegna</label>
+          </div>
+
+          <div class="form-group">
+            <div id="creditCardNumber" class="form-control"></div>
+            <label>Carta di Credito</label>
+          </div>
+          <div class="form-grid">
+              <div class="form-group">
                 <div id="expireDate" class="form-control"></div>
+                <label for="expireDate">Data di scadenza</label>
               </div>
-              <div class="col-6">
-                <label>CVV</label>
+              <div class="form-group">
                 <div id="cvv" class="form-control"></div>
+                <label>CVV</label>
               </div>
             </div>
-          </div>
-          <button type="submit" class="form-button" @click.prevent="payWithCreditCard">
-            Paga con Carta di Credito
-          </button>
-        </form>
+            <button type="submit" class="form-button" @click.prevent="payWithCreditCard">
+              Paga con Carta di Credito
+            </button>
+          </form>
+        </div>
         <div class="alert alert-success" v-if="nonce">
           Pagamento avvenuto con successo
         </div>
@@ -158,6 +174,7 @@ export default {
         </div>
       </div>
     </div>
+
     <div class="col-dx">
       <div class="card-header">Il tuo ordine</div>
       <div class="card-body">
@@ -178,7 +195,7 @@ export default {
         </div>
       </div>
     </div>
-  </div>
+  <!-- </div> -->
 </template>
 
 <style scoped lang="scss">
@@ -196,22 +213,61 @@ export default {
       margin: 10px 0px 20px;
       font-size: 1.4rem;
       padding: 5px;
-      border-bottom: 2px solid $orange;
-      border-left: 2px solid $orange;
+      // border-bottom: 2px solid $orange;
+      // border-left: 2px solid $orange;
     }
 
     .card-body {
-      padding: 30px 80px;
-      background-color: $linen;
-      border-radius: 25px;
-      box-shadow: -5px 5px 0px 0px $orange;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: 1.4rem;
+      width: min(500px, 100% - 2rem);
+      border-radius: 1rem;
+      background-color: #FFF2E7;
+      border: 1px solid #FC8019;
+      padding: 2rem;
+      color: #3D4152;
 
       .form-group {
-        margin: 10px 0px;
+        position: relative;
+        margin-bottom: 1.5rem;
+        z-index: 2;
+        label {
+          position: absolute;
+          left: 1rem;
+          top: 50%;
+          transform: translateY(-50%);
+          font-size: 1rem;
+          z-index: 1;
+          transition: $transition;
+        }
+        textarea ~ label {
+          position: absolute;
+          left: 1rem;
+          top: 1rem;
+          transform: translateY(-50%);
+          font-size: 1rem;
+          z-index: 1;
+          transition: $transition;
+        }
+        input:focus,
+        input:valid,
+        textarea:focus,
+        textarea:valid {
+          border-color: $orange;
+        }
+        input:focus ~ label,
+        input:valid ~ label,
+        textarea:focus ~ label,
+        textarea:valid ~ label {
+          top: 0;
+          font-size: 0.875rem;
+          background-color: $linen;
+          color: $orange;
+          padding-inline: 0.25rem;
+          left: 0.75rem;
+          z-index: 3;
+          
+        }
+       
+       
 
         #amount {
           font-size: 1.3rem;
@@ -220,9 +276,41 @@ export default {
         #creditCardNumber,
         #expireDate,
         #cvv {
-          height: 80px;
+          position: relative;
+          height: 40px;
+          border: 1px solid $silver;
+          border-radius: 0.5rem;
+          font-family: 'Outfit', sans-serif;
+          transition: $transition;
+          z-index: 2;
+         
+        }
+        #creditCardNumber.braintree-hosted-fields-focused,
+        #expireDate.braintree-hosted-fields-focused,
+        #cvv.braintree-hosted-fields-focused {
+            border-color: $orange;
+        }
+        #creditCardNumber.braintree-hosted-fields-focused ~ label,
+        #expireDate.braintree-hosted-fields-focused ~ label,
+        #cvv.braintree-hosted-fields-focused ~ label,
+        #creditCardNumber.braintree-hosted-fields-valid ~ label,
+        #expireDate.braintree-hosted-fields-valid ~ label,
+        #cvv.braintree-hosted-fields-valid ~ label {
+          top: 0;
+          font-size: 0.75rem;
+          background-color: $linen;
+          color: $orange;
+          padding-inline: 0.25rem;
+          left: 0.75rem;
+          z-index: 3;
         }
       }
+
+      .form-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1rem;
+        }
 
       .form-button {
         background-color: rgb(247, 202, 0);
@@ -259,13 +347,30 @@ export default {
       input,
       textarea {
         background-color: transparent;
-        border: none;
-        margin: 35px 0px;
+        border: 1px solid $silver;
+        line-height: 40px;
+        border-radius: 0.5rem;
+        padding-left: 1rem;
+        font-size: 1rem;
+        transition: $transition;
+        z-index: 2;
         width: 100%;
-
         &:focus {
           outline: none;
         }
+        &:not(:placeholder-shown) + label {
+                top: 0;
+                font-size: 0.875rem;
+                padding-inline: 0.25rem;
+                left: 0.5rem;
+                background-color: $linen;
+            }
+      }
+
+      textarea {
+        resize: none;
+        height: 100px;
+        font-family: 'Outfit', sans-serif;
       }
     }
   }
