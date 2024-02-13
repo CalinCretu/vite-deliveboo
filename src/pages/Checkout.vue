@@ -159,26 +159,23 @@ export default {
       </div>
     </div>
     <div class="col-dx">
-      <div class="cart-header">
-        <div class="cart-body">
-          <div class="cart-card" v-for="card in store.cart">
-            <div class="cart-card-name">
-              <div>{{ card.item_name }}</div>
-              <div>€ {{ store.calcPartial(card.item_id) }}</div>
-            </div>
-            <div class="cart-item-delete" @click="store.deleteItem(card.item_id)">
-              <font-awesome-icon :icon="['fas', 'trash-can']" />
-            </div>
-            <div class="cart-card-counter">
-              <button @click="store.removeItem(card.item_id)"><font-awesome-icon :icon="['fas', 'minus']" /></button>
-              <div class="counter">{{ card.quantity }}</div>
-              <button @click="store.addQuantity(card.item_id)"><font-awesome-icon :icon="['fas', 'plus']" /></button>
-            </div>
+      <div class="card-header">Il tuo ordine</div>
+      <div class="card-body">
+        <p v-if="store.cart.length === 0">Il tuo carrello è vuoto</p>
+        <div class="cart-card" v-for="card in store.cart">
+          <div class="cart-card-name">
+            <div>{{ card.item_name }}</div>
+            <div>€ {{ store.calcPartial(card.item_id) }}</div>
+          </div>
+          <div class="cart-item-delete" @click="store.deleteItem(card.item_id)">
+            <font-awesome-icon :icon="['fas', 'trash-can']" />
+          </div>
+          <div class="cart-card-counter">
+            <button @click="store.removeItem(card.item_id)"><font-awesome-icon :icon="['fas', 'minus']" /></button>
+            <div class="counter">{{ card.quantity }}</div>
+            <button @click="store.addQuantity(card.item_id)"><font-awesome-icon :icon="['fas', 'plus']" /></button>
           </div>
         </div>
-      </div>
-      <div class="cart-total">
-        Totale: &euro; &nbsp;{{ store.calcTotal() }}
       </div>
     </div>
   </div>
@@ -193,7 +190,8 @@ export default {
   gap: 1rem;
   grid-template-columns: 1fr 1fr;
 
-  .col-sx {
+  .col-sx,
+  .col-dx {
     .card-header {
       margin: 10px 0px 20px;
       font-size: 1.4rem;
@@ -273,7 +271,7 @@ export default {
   }
 
   .col-dx {
-    .cart-body {
+    .card-body {
       overflow: auto;
       max-width: 800px;
       height: 60vh;
@@ -286,6 +284,7 @@ export default {
         margin-bottom: 15px;
         background-color: rgba($orange, 0.2);
         border-radius: 25px;
+        width: 100%;
 
         .cart-card-name {
           font-size: 18px;
