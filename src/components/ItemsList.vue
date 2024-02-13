@@ -57,30 +57,35 @@ export default {
                 </div>
                 <div class="cart">
                     <h4>Il tuo ordine</h4>
+
                     <div class="cart-body" >
                         <p v-if="store.cart.length === 0">Il tuo carrello è vuoto</p>   
 
-                    <div class="cart-card" v-for="card in store.cart">
-                        <div class="cart-card-name">
-                            <div>{{card.item_name}}</div>
-                            <div>€ {{store.calcPartial(card.item_id)}}</div>
-                        </div>
-                        <div class="cart-item-delete" @click="store.deleteItem(card.item_id)">
-                            <font-awesome-icon :icon="['fas', 'trash-can']" />
-                        </div>
-                        <div class="cart-card-counter">
-                            <button @click="store.removeItem(card.item_id)"><font-awesome-icon :icon="['fas', 'minus']" /></button>
-                            <div class="counter">{{card.quantity}}</div>
-                            <button @click="store.addQuantity(card.item_id)"><font-awesome-icon :icon="['fas', 'plus']" /></button>
+                        <div class="cart-card" v-for="card in store.cart">
+                            <div class="cart-card-name">
+                                <div>{{card.item_name}}</div>
+                                <div>€ {{store.calcPartial(card.item_id)}}</div>
+                            </div>
+                            <div class="cart-item-delete" @click="store.deleteItem(card.item_id)">
+                                <font-awesome-icon :icon="['fas', 'trash-can']" />
+                            </div>
+                            <div class="cart-card-counter">
+                                <button @click="store.removeItem(card.item_id)"><font-awesome-icon :icon="['fas', 'minus']" /></button>
+                                <div class="counter">{{card.quantity}}</div>
+                                <button @click="store.addQuantity(card.item_id)"><font-awesome-icon :icon="['fas', 'plus']" /></button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="cart-total">
-                    Totale: &euro; &nbsp;{{ store.calcTotal() }}
-                </div>
-                <div class="cart-confirm" :class="store.cart.length === 0 ? 'disable' : ''">
-                    Procedi con l'ordine
-                </div>
+
+                    <div class="pay">
+                        <div class="cart-total">
+                            Totale: &euro; &nbsp;{{ store.calcTotal() }}
+                        </div>
+
+                        <div class="cart-confirm" :class="store.cart.length === 0 ? 'disable' : ''">
+                            Procedi con l'ordine
+                        </div>
+                    </div>
                 </div>
                 <div class="cart-mobile" :class="CartMobileOrder ? 'active' : ''">
                     <div class="title">
@@ -90,27 +95,32 @@ export default {
                     <div class="cart-body" >
                         <p v-if="store.cart.length === 0">Il tuo carrello è vuoto</p>   
 
-                    <div class="cart-card" v-for="card in store.cart">
-                        <div class="cart-card-name">
-                            <div>{{card.item_name}}</div>
-                            <div>€ {{store.calcPartial(card.item_id)}}</div>
-                        </div>
-                        <div class="cart-item-delete" @click="store.deleteItem(card.item_id)">
-                            <font-awesome-icon :icon="['fas', 'trash-can']" />
-                        </div>
-                        <div class="cart-card-counter">
-                            <button @click="store.removeItem(card.item_id)"><font-awesome-icon :icon="['fas', 'minus']" /></button>
-                            <div class="counter">{{card.quantity}}</div>
-                            <button @click="store.addQuantity(card.item_id)"><font-awesome-icon :icon="['fas', 'plus']" /></button>
+                        <div class="cart-card" v-for="card in store.cart">
+                            <div class="cart-card-name">
+                                <div>{{card.item_name}}</div>
+                                <div>€ {{store.calcPartial(card.item_id)}}</div>
+                            </div>
+
+                            <div class="cart-item-delete" @click="store.deleteItem(card.item_id)">
+                                <font-awesome-icon :icon="['fas', 'trash-can']" />
+                            </div>
+
+                            <div class="cart-card-counter">
+                                <button @click="store.removeItem(card.item_id)"><font-awesome-icon :icon="['fas', 'minus']" /></button>
+                                <div class="counter">{{card.quantity}}</div>
+                                <button @click="store.addQuantity(card.item_id)"><font-awesome-icon :icon="['fas', 'plus']" /></button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="cart-total">
-                    Totale: &euro; &nbsp;{{ store.calcTotal() }}
-                </div>
-                <div class="cart-confirm" :class="store.cart.length === 0 ? 'disable' : ''">
-                    Procedi con l'ordine
-                </div>
+                    <div class="pay">
+                        <div class="cart-total">
+                            Totale: &euro; &nbsp;{{ store.calcTotal() }}
+                        </div>
+                        
+                        <div class="cart-confirm" :class="store.cart.length === 0 ? 'disable' : ''">
+                            Procedi con l'ordine
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="cart-mobile-preview" :class="store.calcTotalQuantity() > 0 ? 'show' : ''">
@@ -130,38 +140,7 @@ export default {
                 </div>
                 
             </div>
-            <!-- <div class="row">
-                <div class="col-card" v-for="(item, index) in items">
-                    <div class="card" :class="store.returnQty(item.id) > 0 ? 'in-cart' : ''">
-                        <img class="item-img" :src="`http://127.0.0.1:8000/storage/${item.item_img}`" alt="">
-                        <div class="item-info">
-                            <div class="item-name">{{ item.name }}</div>
-                            <div class="labels">
-                                <div class="label spicy" v-show="item.is_spicy">
-                                    <font-awesome-icon :icon="['fas', 'pepper-hot']" />
-                                </div>
-                                <div class="label veg" v-show="item.is_vegan">
-                                    <font-awesome-icon :icon="['fas', 'seedling']" />
-                                </div>
-                                <div class="label gf" v-show="item.is_gluten_free">
-                                    <font-awesome-icon :icon="['fas', 'wheat-awn-circle-exclamation']" />
-                                </div>
-                            </div>
-                            <div class="cart-card-counter">
-                                <button @click="store.removeItem(item.id)"
-                                    v-show="store.returnQty(item.id) > 0"><font-awesome-icon
-                                        :icon="['fas', 'minus']" /></button>
-                                <div class="price">&euro; &nbsp;{{ item.price }}</div>
-                                <button
-                                    @click="store.addToCart(item.id, item.name, item.price, items.length, item.user_id)"><font-awesome-icon
-                                        :icon="['fas', 'plus']" /></button>
-                                <div class="quantity" v-show="store.returnQty(item.id) > 0">X {{ store.returnQty(item.id) }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
+           
         </div>
         <div v-if="store.showWarning" class="bg-warning-card">
             <div class="warning-card-body">
@@ -300,11 +279,11 @@ export default {
 
     .grid {
         display: grid;
-        grid-template-columns: 1fr 300px;
+        grid-template-columns: 1fr;
         gap: 2rem;
 
-        @media (max-width: 768px) {
-            grid-template-columns: 1fr;
+        @media (min-width: 768px) {
+            grid-template-columns: 1fr 300px;
         }
 
         .grid-card {
@@ -468,22 +447,37 @@ export default {
     }
 
     .cart {
+        position: relative;
+        display: none;
+        flex-direction: column;
         background-color: $linen;
         border-radius: 1rem;
         padding: 1rem;
+
+        
         h4 {
             text-align: center;
             font-size: 1.5rem;
             margin-bottom: 1rem;
         }
+        .pay {
+            margin-top: auto; 
+            // position: absolute;
+            // inset: auto 1rem 1rem 1rem;
+            // width: 100%;
+        }
 
-        @media (max-width:768px){
-            display: none;
+        @media (min-width:768px){
+            display: flex;
         }
     }
 
     .cart-mobile {
+        display: flex;
+        flex-direction: column;
+
         position: fixed;
+        overflow: auto;
         inset: 0;
         transform: translateX(100%);
         z-index: 1000;
@@ -505,6 +499,9 @@ export default {
                 transform: translateY(-50%);
                 cursor: pointer;
             }
+        }
+        .pay {
+            margin-top: auto;
         }
     }
 
@@ -567,9 +564,9 @@ export default {
 
     .cart-body {
             overflow: auto;
-            // max-width: 800px;
-            // height: 60vh;
-            // padding: 18px;
+            p {
+                text-align: center;
+            }
 
             .cart-card {
                 position: relative;
@@ -651,7 +648,7 @@ export default {
 
         .cart-total {
             text-align: start;
-            margin: 10px;
+            margin-bottom: 1rem;
             padding: 10px;
             color: black;
             border-radius: 25px;
@@ -660,7 +657,7 @@ export default {
 
         .cart-confirm { 
             text-align: center;
-            margin: 0px 10px 15px;
+            
             padding: 10px;
             color: white;
             border-radius: 25px;

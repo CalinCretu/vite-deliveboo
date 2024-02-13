@@ -47,10 +47,12 @@ export default {
             </div>
             <ul class="list">
 
-                <li @click="getCartDropdown()" class="header-btn cart">
+                <!-- <li @click="getCartDropdown()" class="header-btn cart">
                     <font-awesome-icon :icon="['fab', 'opencart']" />
                     <div class="articles-numbers" v-if="store.calcTotalQuantity() > 0">
                         {{ store.calcTotalQuantity() }}
+                        </div>
+                </li> -->
                 <li @click="getCartDropdown()" class="header-btn cart-btn">
                     <font-awesome-icon :icon="['fab', 'opencart']" />
                     <div class="cart-quantity" v-show="store.cart.length">
