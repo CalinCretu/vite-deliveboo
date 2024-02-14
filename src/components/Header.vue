@@ -53,7 +53,7 @@ export default {
                         {{ store.calcTotalQuantity() }}
                         </div>
                 </li> -->
-                <li @click="getCartDropdown()" class="header-btn cart-btn">
+                <li @click="getCartDropdown()" class="header-btn cart-btn" v-if="store.currentRoute != 'checkout'">
                     <font-awesome-icon :icon="['fab', 'opencart']" />
                     <div class="cart-quantity" v-show="store.cart.length">
                         {{ store.cartQuantity() }}
@@ -93,11 +93,13 @@ export default {
             <div @click="getCartDropdown()" class="cart-close-btn">
                 <font-awesome-icon :icon="['fas', 'xmark']" />
             </div>
+            <h4>Il tuo ordine</h4>
             <div class="cart-body">
+                <p v-if="store.cart.length === 0">Il tuo carrello è vuoto</p>
                 <div class="cart-card" v-for="card in store.cart">
                     <div class="cart-card-name">
                         <div>{{ card.item_name }}</div>
-                        <div>€ {{ store.calcPartial(card.item_id) }}</div>
+                        <div class="partial-price">€ {{ store.calcPartial(card.item_id) }}</div>
                     </div>
                     <div class="cart-item-delete" @click="store.deleteItem(card.item_id)">
                         <font-awesome-icon :icon="['fas', 'trash-can']" />
@@ -114,38 +116,9 @@ export default {
             <div class="cart-total">
                 Totale: &euro; &nbsp;{{ store.calcTotal() }}
             </div>
-            <div class="cart-confrim">
-                <router-link :to="{ name: 'checkout' }" :class="store.cart.length === 0 ? 'disable' : ''"> Procedi con
+            <div class="cart-confrim" :class="store.cart.length === 0 ? 'disable' : ''">
+                <router-link :to="{ name: 'checkout' }" class="proceed"> Procedi con
                     l'ordine</router-link>
-            </div>
-            <div v-if="dropdown" class="cart-dropdown">
-                <div @click="getCartDropdown()" class="cart-close-btn">
-                    <font-awesome-icon :icon="['fas', 'xmark']" />
-                </div>
-                <div class="cart-body">
-                    <div class="cart-card" v-for="card in store.cart">
-                        <div class="cart-card-name">
-                            <div>{{ card.item_name }}</div>
-                            <div>€ {{ store.calcPartial(card.item_id) }}</div>
-                        </div>
-                        <div class="cart-item-delete" @click="store.deleteItem(card.item_id)">
-                            <font-awesome-icon :icon="['fas', 'trash-can']" />
-                        </div>
-                        <div class="cart-card-counter">
-                            <button @click="store.removeItem(card.item_id)"><font-awesome-icon
-                                    :icon="['fas', 'minus']" /></button>
-                            <div class="counter">{{ card.quantity }}</div>
-                            <button @click="store.addQuantity(card.item_id)"><font-awesome-icon
-                                    :icon="['fas', 'plus']" /></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="cart-total">
-                    Totale: &euro; &nbsp;{{ store.calcTotal() }}
-                </div>
-                <div class="cart-confrim" :class="store.cart.length === 0 ? 'disable' : ''">
-                    <router-link :to="{ name: 'checkout' }" class="proceed">Procedi con l'ordine</router-link>
-                </div>
             </div>
         </div>
     </header>
@@ -319,6 +292,18 @@ header {
         color: black;
         display: flex;
         flex-direction: column;
+        box-shadow: 2px 2px 10px rgba($color: #000000, $alpha: 0.3);
+        max-height: 80vh;
+
+        h4 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        p {
+            text-align: center;
+        }
 
         .cart-close-btn {
             align-self: flex-end;
@@ -332,6 +317,7 @@ header {
             align-items: center;
             justify-content: center;
             transition: 250ms linear;
+            flex-shrink: 0;
 
             &:hover {
                 color: $linen;
@@ -377,8 +363,15 @@ header {
                 font-size: 1rem;
 
                 .cart-card-name {
+                    font-size: 1rem;
+                    font-weight: 600;
                     display: flex;
                     justify-content: space-between;
+                    gap: 1rem;
+
+                    .partial-price {
+                        flex-shrink: 0;
+                    }
                 }
 
                 .cart-item-delete {
