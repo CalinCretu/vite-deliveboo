@@ -62,6 +62,7 @@ export const store = reactive({
     },
   ],
   cart: [],
+  currentRoute: '',
   showWarning: false,
   currentUser: null,
   warningUser: null,

@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { store } from './store.js';
 
 import HomePage from "./pages/HomePage.vue";
 import RestaurantPage from "./pages/RestaurantPage.vue";
@@ -34,5 +35,10 @@ const router = createRouter({
     }
   ],
 });
+
+router.afterEach((to, from) => {
+  store.currentRoute = router.currentRoute.value.name;
+  console.log(store.currentRoute);
+})
 
 export { router };

@@ -58,14 +58,12 @@ export default {
                 </div>
                 <div class="cart">
                     <h4>Il tuo ordine</h4>
-
                     <div class="cart-body">
                         <p v-if="store.cart.length === 0">Il tuo carrello è vuoto</p>
-
                         <div class="cart-card" v-for="card in store.cart">
                             <div class="cart-card-name">
                                 <div>{{ card.item_name }}</div>
-                                <div>€ {{ store.calcPartial(card.item_id) }}</div>
+                                <div class="partial-price">€ {{ store.calcPartial(card.item_id) }}</div>
                             </div>
                             <div class="cart-item-delete" @click="store.deleteItem(card.item_id)">
                                 <font-awesome-icon :icon="['fas', 'trash-can']" />
@@ -83,6 +81,7 @@ export default {
                     <div class="pay">
                         <div class="cart-total">
                             Totale: &euro; &nbsp;{{ store.calcTotal() }}
+                            <div class="empty-cart" @click="store.emptyCart()">Svuota Carrello</div>
                         </div>
                         <div class="cart-confirm" :class="store.cart.length === 0 ? 'disable' : ''">
                             <router-link :to="{ name: 'checkout' }" class="proceed">Procedi con l'ordine</router-link>
@@ -483,9 +482,6 @@ export default {
 
         .pay {
             margin-top: auto;
-            // position: absolute;
-            // inset: auto 1rem 1rem 1rem;
-            // width: 100%;
         }
 
         @media (min-width:768px) {
@@ -611,7 +607,13 @@ export default {
                 font-size: 1rem;
                 font-weight: 600;
                 display: flex;
+                gap: 1rem;
                 justify-content: space-between;
+
+                .partial-price {
+                    flex-shrink: 0;
+                }
+
             }
 
             .cart-item-delete {
@@ -684,6 +686,22 @@ export default {
         color: black;
         border-radius: 25px;
         background-color: $white;
+        margin-top: 10px;
+        position: relative;
+
+        .empty-cart {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.7rem;
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+                color: red;
+            }
+        }
     }
 
     .cart-confirm {
@@ -702,6 +720,7 @@ export default {
             background-color: $linen;
             color: black;
         }
+
         &.disable {
             color: $silver;
             background-color: $light-silver;
@@ -709,7 +728,7 @@ export default {
 
             .proceed {
                 cursor: not-allowed;
-                pointer-events: none; 
+                pointer-events: none;
             }
         }
     }
