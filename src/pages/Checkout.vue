@@ -1,12 +1,12 @@
 <script>
 import braintree from 'braintree-web';
 import { store } from '../store';
+import axios from 'axios';
 export default {
   data() {
     return {
       store,
       hostedFieldInstance: false,
-      nonce: "",
       error: "",
     }
   },
@@ -15,11 +15,11 @@ export default {
       if (this.hostedFieldInstance) {
 
         this.error = "";
-        this.nonce = "";
 
         this.hostedFieldInstance.tokenize().then(payload => {
           console.log(payload);
-          this.nonce = payload.nonce;
+          this.store.paymentRequest.nonce = payload.nonce;
+          this.store.paymentRequest.amount = this.store.calcTotal(); 
         })
           .catch(err => {
             console.error(err);
@@ -29,7 +29,7 @@ export default {
     },
     createBraintree() {
       braintree.client.create({
-        authorization: "sandbox_fwwypyc6_txrv7qdk3dghrytf"
+        authorization: "sandbox_v2dty569_7kfb5d3sq8xwt3tr"
       })
         .then(clientInstance => {
           let options = {
@@ -42,7 +42,7 @@ export default {
                 'padding-left': '1rem',
                 'backgroud-color': 'red'
               },
-              
+
             },
             fields: {
               number: {
@@ -69,17 +69,27 @@ export default {
 
         });
     },
+    async createTransaction() {
+      try {
+        const response = await axios.post('http://127.0.0.1:8000/api/createTransaction', this.store.paymentRequest);
+        console.log('Transaction created:', response.data);
+        // Handle success response here
+      } catch (error) {
+        console.error('Error creating transaction:', error);
+        // Handle error response here
+      }
+    },
   },
   mounted() {
-
     this.createBraintree();
-    
+
   }
 }
 </script>
 
 <template>
   <div class="container">
+
    <div class="grid">
       <div class="left">
         <div class="form-wrapper">
@@ -175,6 +185,80 @@ export default {
       </div>
    </div>
   </div>
+
+    <div class="col-sx">
+      <div class="card-body">
+        <div class="card-header">Inserisci i dati richiesti per procedere con il pagamento</div>
+        <form>
+          <div class="form-group">
+            <input type="text" id="nome" name="nome" placeholder="&nbsp" required>
+            <label for="nome">Nome</label>
+          </div>
+          <div class="form-group">
+            <input type="email" id="mail" name="mail" placeholder="&nbsp" required>
+            <label for="mail">Email</label>
+          </div>
+          <div class="form-group">
+            <input type="tel" id="telefono" name="telefono" placeholder="&nbsp" required>
+            <label for="telefono">Telefono</label>
+          </div>
+          <div class="form-group">
+            <textarea id="dettagli_ordine" name="dettagli_ordine" rows="2" cols="50" placeholder="&nbsp"
+              required></textarea>
+            <label for="dettagli_ordine">Richieste aggiuntive</label>
+          </div>
+          <div class="form-group">
+            <textarea id="indirizzo" name="indirizzo" rows="2" cols="50" placeholder="&nbsp" required></textarea>
+            <label for="indirizzo">Indirizzo di consegna</label>
+          </div>
+          <div class="form-group">
+            <div id="creditCardNumber" class="form-control"></div>
+            <label>Carta di Credito</label>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <div id="expireDate" class="form-control"></div>
+              <label for="expireDate">Data di scadenza</label>
+            </div>
+            <div class="form-group">
+              <div id="cvv" class="form-control"></div>
+              <label>CVV</label>
+            </div>
+          </div>
+          <button type="submit" class="form-button" @click.prevent="payWithCreditCard">
+            Paga con Carta di Credito
+          </button>
+        </form>
+      </div>
+      <div class="alert alert-success" v-if="store.paymentRequest.nonce">
+        Pagamento avvenuto con successo
+      </div>
+      <div class="error-msg" v-if="error">
+        {{ error }}
+      </div>
+    </div>
+  </div>
+  <div class="col-dx">
+    <div class="card-header">Il tuo ordine</div>
+    <div class="card-body">
+      <p v-if="store.cart.length === 0">Il tuo carrello è vuoto</p>
+      <div class="cart-card" v-for="card in store.cart">
+        <div class="cart-card-name">
+          <div>{{ card.item_name }}</div>
+          <div>€ {{ store.calcPartial(card.item_id) }}</div>
+        </div>
+        <div class="cart-item-delete" @click="store.deleteItem(card.item_id)">
+          <font-awesome-icon :icon="['fas', 'trash-can']" />
+        </div>
+        <div class="cart-card-counter">
+          <button @click="store.removeItem(card.item_id)"><font-awesome-icon :icon="['fas', 'minus']" /></button>
+          <div class="counter">{{ card.quantity }}</div>
+          <button @click="store.addQuantity(card.item_id)"><font-awesome-icon :icon="['fas', 'plus']" /></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button @click="createTransaction()">Submit</button>
 </template>
 
 <style scoped lang="scss">
@@ -215,6 +299,7 @@ export default {
         position: relative;
         margin-bottom: 1.5rem;
         z-index: 2;
+
         label {
           position: absolute;
           left: 1rem;
@@ -224,7 +309,8 @@ export default {
           z-index: 1;
           transition: $transition;
         }
-        textarea ~ label {
+
+        textarea~label {
           position: absolute;
           left: 1rem;
           top: 1rem;
@@ -233,16 +319,18 @@ export default {
           z-index: 1;
           transition: $transition;
         }
+
         input:focus,
         input:valid,
         textarea:focus,
         textarea:valid {
           border-color: $orange;
         }
-        input:focus ~ label,
-        input:valid ~ label,
-        textarea:focus ~ label,
-        textarea:valid ~ label {
+
+        input:focus~label,
+        input:valid~label,
+        textarea:focus~label,
+        textarea:valid~label {
           top: 0;
           font-size: 0.875rem;
           background-color: $linen;
@@ -250,10 +338,10 @@ export default {
           padding-inline: 0.25rem;
           left: 0.75rem;
           z-index: 3;
-          
+
         }
-       
-       
+
+
 
         #amount {
           font-size: 1.3rem;
@@ -269,19 +357,21 @@ export default {
           font-family: 'Outfit', sans-serif;
           transition: $transition;
           z-index: 2;
-         
+
         }
+
         #creditCardNumber.braintree-hosted-fields-focused,
         #expireDate.braintree-hosted-fields-focused,
         #cvv.braintree-hosted-fields-focused {
-            border-color: $orange;
+          border-color: $orange;
         }
-        #creditCardNumber.braintree-hosted-fields-focused ~ label,
-        #expireDate.braintree-hosted-fields-focused ~ label,
-        #cvv.braintree-hosted-fields-focused ~ label,
-        #creditCardNumber.braintree-hosted-fields-valid ~ label,
-        #expireDate.braintree-hosted-fields-valid ~ label,
-        #cvv.braintree-hosted-fields-valid ~ label {
+
+        #creditCardNumber.braintree-hosted-fields-focused~label,
+        #expireDate.braintree-hosted-fields-focused~label,
+        #cvv.braintree-hosted-fields-focused~label,
+        #creditCardNumber.braintree-hosted-fields-valid~label,
+        #expireDate.braintree-hosted-fields-valid~label,
+        #cvv.braintree-hosted-fields-valid~label {
           top: 0;
           font-size: 0.75rem;
           background-color: $linen;
@@ -293,10 +383,10 @@ export default {
       }
 
       .form-grid {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 1rem;
-        }
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
 
       .form-button {
         background-color: rgb(247, 202, 0);
@@ -341,16 +431,18 @@ export default {
         transition: $transition;
         z-index: 2;
         width: 100%;
+
         &:focus {
           outline: none;
         }
-        &:not(:placeholder-shown) + label {
-                top: 0;
-                font-size: 0.875rem;
-                padding-inline: 0.25rem;
-                left: 0.5rem;
-                background-color: $linen;
-            }
+
+        &:not(:placeholder-shown)+label {
+          top: 0;
+          font-size: 0.875rem;
+          padding-inline: 0.25rem;
+          left: 0.5rem;
+          background-color: $linen;
+        }
       }
 
       textarea {

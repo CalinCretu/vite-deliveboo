@@ -827,8 +827,6 @@ export default {
                     gap: 12px;
                 }
 
-
-
                 &:hover {
                     box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
                     // transform: scale(1.05);

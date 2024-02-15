@@ -73,6 +73,10 @@ export const store = reactive({
     item_price: null,
     quantity: 1,
   },
+  paymentRequest: {
+    nonce: '',
+    amount: 0
+  },
   addToCart(id, name, price, user_id) {
     if (this.cart.length === 0) this.currentUser = user_id;
     if (this.currentUser === user_id) {
