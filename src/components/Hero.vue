@@ -74,7 +74,7 @@ export default {
         z-index: 10;
         color: $white;
         background-color: rgba($color: $black, $alpha: 0.3);
-        font-size: 8vw;
+        font-size: clamp(1rem, 8vw, 6rem);
         font-weight: 600;
     }
 

@@ -3,6 +3,8 @@ import { createApp } from "vue";
 import App from "./App.vue";
 
 import { router } from "./router";
+import Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
 
 import VueWriter from "vue-writer";
 
@@ -93,5 +95,6 @@ library.add(
 createApp(App)
   .use(router)
   .use(VueWriter)
+  .use(Toast)
   .component("font-awesome-icon", FontAwesomeIcon)
   .mount("#app");
