@@ -151,9 +151,6 @@ export default {
             </div>
       </div>
           
-        <!-- </div> -->
-      
-  
       <div class="right">
         <div class="order-wrapper">
           <h4>Il tuo ordine</h4>
@@ -186,78 +183,7 @@ export default {
    </div>
   </div>
 
-    <div class="col-sx">
-      <div class="card-body">
-        <div class="card-header">Inserisci i dati richiesti per procedere con il pagamento</div>
-        <form>
-          <div class="form-group">
-            <input type="text" id="nome" name="nome" placeholder="&nbsp" required>
-            <label for="nome">Nome</label>
-          </div>
-          <div class="form-group">
-            <input type="email" id="mail" name="mail" placeholder="&nbsp" required>
-            <label for="mail">Email</label>
-          </div>
-          <div class="form-group">
-            <input type="tel" id="telefono" name="telefono" placeholder="&nbsp" required>
-            <label for="telefono">Telefono</label>
-          </div>
-          <div class="form-group">
-            <textarea id="dettagli_ordine" name="dettagli_ordine" rows="2" cols="50" placeholder="&nbsp"
-              required></textarea>
-            <label for="dettagli_ordine">Richieste aggiuntive</label>
-          </div>
-          <div class="form-group">
-            <textarea id="indirizzo" name="indirizzo" rows="2" cols="50" placeholder="&nbsp" required></textarea>
-            <label for="indirizzo">Indirizzo di consegna</label>
-          </div>
-          <div class="form-group">
-            <div id="creditCardNumber" class="form-control"></div>
-            <label>Carta di Credito</label>
-          </div>
-          <div class="form-grid">
-            <div class="form-group">
-              <div id="expireDate" class="form-control"></div>
-              <label for="expireDate">Data di scadenza</label>
-            </div>
-            <div class="form-group">
-              <div id="cvv" class="form-control"></div>
-              <label>CVV</label>
-            </div>
-          </div>
-          <button type="submit" class="form-button" @click.prevent="payWithCreditCard">
-            Paga con Carta di Credito
-          </button>
-        </form>
-      </div>
-      <div class="alert alert-success" v-if="store.paymentRequest.nonce">
-        Pagamento avvenuto con successo
-      </div>
-      <div class="error-msg" v-if="error">
-        {{ error }}
-      </div>
-    </div>
-  </div>
-  <div class="col-dx">
-    <div class="card-header">Il tuo ordine</div>
-    <div class="card-body">
-      <p v-if="store.cart.length === 0">Il tuo carrello è vuoto</p>
-      <div class="cart-card" v-for="card in store.cart">
-        <div class="cart-card-name">
-          <div>{{ card.item_name }}</div>
-          <div>€ {{ store.calcPartial(card.item_id) }}</div>
-        </div>
-        <div class="cart-item-delete" @click="store.deleteItem(card.item_id)">
-          <font-awesome-icon :icon="['fas', 'trash-can']" />
-        </div>
-        <div class="cart-card-counter">
-          <button @click="store.removeItem(card.item_id)"><font-awesome-icon :icon="['fas', 'minus']" /></button>
-          <div class="counter">{{ card.quantity }}</div>
-          <button @click="store.addQuantity(card.item_id)"><font-awesome-icon :icon="['fas', 'plus']" /></button>
-        </div>
-      </div>
-    </div>
-  </div>
+
   <button @click="createTransaction()">Submit</button>
 </template>
 
