@@ -5,6 +5,7 @@ export default {
         return {
             store: store,
             CartMobileOrder: false,
+            confirmEmptyCart: false
         }
     },
     methods: {
@@ -13,6 +14,10 @@ export default {
         },
         closeCartMobileOrder() {
             this.CartMobileOrder = false;
+        },
+        closeEmptyCart() {
+            store.emptyCart();
+            this.confirmEmptyCart = false;
         }
     },
     props: {
@@ -81,8 +86,19 @@ export default {
                     <div class="pay">
                         <div class="cart-total">
                             Totale: &euro; &nbsp;{{ store.calcTotal() }}
-                            <div class="empty-cart" @click="store.emptyCart()">Svuota Carrello</div>
+                            <div class="empty-cart" @click="confirmEmptyCart = true"
+                            v-if="store.cart.length !== 0">
+                            Svuota Carrello
+                            </div>
+                            <div class="confirm-empty-cart"
+                                 :class="confirmEmptyCart ? 'show' : ''">
+                                <p>Sei sicuro di voler svuotare il carrello?</p>
+                                <button class="confirm" @click="this.closeEmptyCart()">Sì</button>
+                                <button class="return" @click="confirmEmptyCart = false">No</button>
+                            </div>
+
                         </div>
+
                         <div class="cart-confirm" :class="store.cart.length === 0 ? 'disable' : ''">
                             <router-link :to="{ name: 'checkout' }" class="proceed">Procedi con l'ordine</router-link>
                         </div>
@@ -699,7 +715,42 @@ export default {
 
             &:hover {
                 text-decoration: underline;
-                color: red;
+                color: $red;
+            }
+        }
+        .confirm-empty-cart {
+            position: absolute;
+            top: -7rem;
+            left: 0;
+            width: 100%;
+            background-color: $red;
+            color: $white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            transform: translateX(120%);
+            opacity: 0;
+            box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+            transition: $transition-bounce;
+            button {
+                padding: 0.25rem 1rem;
+                border-radius: 3rem;
+                margin-top: 1rem;
+                cursor: pointer;
+                transition: $transition;
+                &.confirm {
+                    background-color: transparent;
+                    color: $white;
+                    border: 1px solid currentColor;
+                    margin-right: 0.5rem;
+                    &:hover {
+                        background-color: $silver;
+                    }
+                }
+            }
+            &.show {
+                
+                opacity: 1;
+                transform: translateX(0);
             }
         }
     }

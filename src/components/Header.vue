@@ -115,8 +115,9 @@ export default {
             </div>
             <div class="cart-total">
                 Totale: &euro; &nbsp;{{ store.calcTotal() }}
+                <div class="empty-cart">Svuota carrello</div>
             </div>
-            <div class="cart-confrim" :class="store.cart.length === 0 ? 'disable' : ''">
+            <div class="cart-confirm" :class="store.cart.length === 0 ? 'disable' : ''">
                 <router-link :to="{ name: 'checkout' }" class="proceed"> Procedi con
                     l'ordine</router-link>
             </div>
@@ -287,12 +288,13 @@ header {
         right: 40px;
         top: 90px;
         width: 300px;
+        padding: 1rem;
         background-color: $linen;
-        border-radius: 25px;
+        border-radius: 1rem;
         color: black;
         display: flex;
         flex-direction: column;
-        box-shadow: 2px 2px 10px rgba($color: #000000, $alpha: 0.3);
+        box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
         max-height: 80vh;
 
         h4 {
@@ -350,7 +352,7 @@ header {
             overflow: auto;
             max-width: 800px;
             height: 60vh;
-            padding: 1rem;
+            
 
             .cart-card {
                 position: relative;
@@ -436,18 +438,27 @@ header {
         }
 
         .cart-total {
+            position: relative;
             text-align: start;
-            margin: 10px;
-            padding: 10px;
+            margin-block: 1rem;
+            padding: 0.625rem 1rem;
             color: black;
             border-radius: 25px;
             background-color: $white;
+            .empty-cart {
+                position: absolute;
+                right: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 0.75rem;
+                cursor: pointer;
+            }
         }
 
-        .cart-confrim {
+        .cart-confirm {
             text-align: center;
-            margin: 0px 10px 15px;
-            padding: 10px;
+            
+            padding: 0.625rem 1rem;
             color: white;
             border-radius: 25px;
             background-color: $orange;

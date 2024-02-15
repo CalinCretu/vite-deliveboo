@@ -62,7 +62,8 @@ export const store = reactive({
     },
   ],
   cart: [],
-  currentRoute: '',
+  currentRoute: "",
+  confirmEmptyCart: false,
   showWarning: false,
   currentUser: null,
   warningUser: null,
@@ -70,11 +71,10 @@ export const store = reactive({
     item_id: null,
     item_name: null,
     item_price: null,
-    quantity: 1
+    quantity: 1,
   },
   addToCart(id, name, price, user_id) {
-    if (this.cart.length === 0)
-      this.currentUser = user_id
+    if (this.cart.length === 0) this.currentUser = user_id;
     if (this.currentUser === user_id) {
       if (!this.addQuantity(id)) {
         console.log(this.addQuantity(id));
@@ -87,11 +87,11 @@ export const store = reactive({
       }
       console.log(this.cart);
     } else {
-      this.showWarning = true
-      this.warningItem.item_id = id
-      this.warningItem.item_name = name
-      this.warningItem.item_price = price
-      this.warningUser = user_id
+      this.showWarning = true;
+      this.warningItem.item_id = id;
+      this.warningItem.item_name = name;
+      this.warningItem.item_price = price;
+      this.warningUser = user_id;
     }
   },
   addQuantity(id) {
@@ -125,12 +125,12 @@ export const store = reactive({
   },
   emptyCart() {
     this.cart = [];
-    this.showWarning = false
+    this.showWarning = false;
   },
   emptyAdd() {
-    this.emptyCart()
-    this.cart.push(this.warningItem)
-    this.currentUser = this.warningUser
+    this.emptyCart();
+    this.cart.push(this.warningItem);
+    this.currentUser = this.warningUser;
   },
   returnQty(id) {
     for (let i = 0; i < this.cart.length; i++) {
@@ -165,13 +165,11 @@ export const store = reactive({
     return 0;
   },
 
-
   cartQuantity() {
-    let tot = 0
+    let tot = 0;
     for (let i = 0; i < this.cart.length; i++) {
-      tot += this.cart[i].quantity
+      tot += this.cart[i].quantity;
     }
-    return tot
-  }
-
+    return tot;
+  },
 });

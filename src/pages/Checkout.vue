@@ -73,129 +73,108 @@ export default {
   mounted() {
 
     this.createBraintree();
-    // braintree.client.create({
-    //   authorization: "sandbox_fwwypyc6_txrv7qdk3dghrytf"
-    // })
-    //   .then(clientInstance => {
-    //     let options = {
-    //       client: clientInstance,
-    //       styles: {
-    //         input: {
-    //           'font-size': '14px',
-    //           'font-family': 'Open Sans'
-    //         }
-    //       },
-    //       fields: {
-    //         number: {
-    //           selector: '#creditCardNumber',
-    //           placeholder: 'Inserici Numero Carta'
-    //         },
-    //         cvv: {
-    //           selector: '#cvv',
-    //           placeholder: 'Enter CVV'
-    //         },
-    //         expirationDate: {
-    //           selector: '#expireDate',
-    //           placeholder: '00 / 0000'
-    //         }
-    //       }
-    //     }
-    //     return braintree.hostedFields.create(options)
-    //   })
-    //   .then(hostedFieldInstance => {
-    //     // @TODO - Use hostedFieldInstance to send data to Braintree
-    //     this.hostedFieldInstance = hostedFieldInstance;
-    //   })
-    //   .catch(err => {
-
-    //   });
+    
   }
 }
 </script>
 
 <template>
   <div class="container">
-    <div class="col-sx">
-      
-      <div class="card-body">
-        <div class="card-header">Inserisci i dati richiesti per procedere con il pagamento</div>
-        <form>
-          <div class="form-group">
-            <input type="text" id="nome" name="nome" placeholder="&nbsp" required>
-            <label for="nome">Nome</label>
-          </div>
-
-          <div class="form-group">
-            <input type="email" id="mail" name="mail" placeholder="&nbsp" required>
-            <label for="mail">Email</label>
-          </div>
-
-          <div class="form-group">
-            <input type="tel" id="telefono" name="telefono" placeholder="&nbsp" required>
-            <label for="telefono">Telefono</label>
-          </div>
-
-          <div class="form-group">
-            <textarea id="dettagli_ordine" name="dettagli_ordine" rows="2"
-            cols="50" placeholder="&nbsp" required></textarea>
-            <label for="dettagli_ordine">Richieste aggiuntive</label>
-          </div>
-
-          <div class="form-group">
-            <textarea id="indirizzo" name="indirizzo" rows="2" cols="50"
-            placeholder="&nbsp" required></textarea>
-            <label for="indirizzo">Indirizzo di consegna</label>
-          </div>
-
-          <div class="form-group">
-            <div id="creditCardNumber" class="form-control"></div>
-            <label>Carta di Credito</label>
-          </div>
-          <div class="form-grid">
+   <div class="grid">
+      <div class="left">
+        <div class="form-wrapper">
+          
+          <!-- <div class="card-body"> -->
+            <h4>Inserisci i dati richiesti per procedere con il pagamento</h4>
+            <form>
               <div class="form-group">
-                <div id="expireDate" class="form-control"></div>
-                <label for="expireDate">Data di scadenza</label>
+                <input type="text" id="nome" name="nome" placeholder="&nbsp" required>
+                <label for="nome">Nome</label>
               </div>
+    
               <div class="form-group">
-                <div id="cvv" class="form-control"></div>
-                <label>CVV</label>
+                <input type="email" id="mail" name="mail" placeholder="&nbsp" required>
+                <label for="mail">Email</label>
+              </div>
+    
+              <div class="form-group">
+                <input type="tel" id="telefono" name="telefono" placeholder="&nbsp" required>
+                <label for="telefono">Telefono</label>
+              </div>
+    
+              <div class="form-group">
+                <textarea id="dettagli_ordine" name="dettagli_ordine" rows="2"
+                cols="50" placeholder="&nbsp" required></textarea>
+                <label for="dettagli_ordine">Richieste aggiuntive</label>
+              </div>
+    
+              <div class="form-group">
+                <textarea id="indirizzo" name="indirizzo" rows="2" cols="50"
+                placeholder="&nbsp" required></textarea>
+                <label for="indirizzo">Indirizzo di consegna</label>
+              </div>
+    
+              <div class="form-group">
+                <div id="creditCardNumber" class="form-control"></div>
+                <label>Carta di Credito</label>
+              </div>
+              <div class="form-grid">
+                  <div class="form-group">
+                    <div id="expireDate" class="form-control"></div>
+                    <label for="expireDate">Data di scadenza</label>
+                  </div>
+                  <div class="form-group">
+                    <div id="cvv" class="form-control"></div>
+                    <label>CVV</label>
+                  </div>
+                </div>
+                <button type="submit" class="form-button" @click.prevent="payWithCreditCard">
+                  Paga con Carta di Credito
+                </button>
+              </form>
+              <div class="alert alert-success" v-if="nonce">
+              Pagamento avvenuto con successo
+            </div>
+            <div class="error-msg" v-if="error">
+              {{ error }}
+            </div>
+            </div>
+      </div>
+          
+        <!-- </div> -->
+      
+  
+      <div class="right">
+        <div class="order-wrapper">
+          <h4>Il tuo ordine</h4>
+          <div class="card-body">
+            
+            <p v-if="store.cart.length === 0">Il tuo carrello è vuoto</p>
+            <div class="cart-card" v-for="card in store.cart">
+              <div class="cart-card-name">
+                <div>{{ card.item_name }}</div>
+                <div class="partial-price">€ {{ store.calcPartial(card.item_id) }}</div>
+              </div>
+              <!-- <div class="cart-item-delete" @click="store.deleteItem(card.item_id)">
+                <font-awesome-icon :icon="['fas', 'trash-can']" />
+              </div> -->
+              <div class="cart-card-counter">
+                <!-- <button @click="store.removeItem(card.item_id)"><font-awesome-icon :icon="['fas', 'minus']" /></button> -->
+                <div class="quantity">Quantità <span class="counter">{{ card.quantity }}</span></div>
+                <!-- <button @click="store.addQuantity(card.item_id)"><font-awesome-icon :icon="['fas', 'plus']" /></button> -->
+                
               </div>
             </div>
-            <button type="submit" class="form-button" @click.prevent="payWithCreditCard">
-              Paga con Carta di Credito
-            </button>
-          </form>
-        </div>
-        <div class="alert alert-success" v-if="nonce">
-          Pagamento avvenuto con successo
-        </div>
-        <div class="error-msg" v-if="error">
-          {{ error }}
-        </div>
-      </div>
-    </div>
-
-    <div class="col-dx">
-      <div class="card-header">Il tuo ordine</div>
-      <div class="card-body">
-        <p v-if="store.cart.length === 0">Il tuo carrello è vuoto</p>
-        <div class="cart-card" v-for="card in store.cart">
-          <div class="cart-card-name">
-            <div>{{ card.item_name }}</div>
-            <div>€ {{ store.calcPartial(card.item_id) }}</div>
           </div>
-          <div class="cart-item-delete" @click="store.deleteItem(card.item_id)">
-            <font-awesome-icon :icon="['fas', 'trash-can']" />
-          </div>
-          <div class="cart-card-counter">
-            <button @click="store.removeItem(card.item_id)"><font-awesome-icon :icon="['fas', 'minus']" /></button>
-            <div class="counter">{{ card.quantity }}</div>
-            <button @click="store.addQuantity(card.item_id)"><font-awesome-icon :icon="['fas', 'plus']" /></button>
+          <div class="cart-total">
+            <div class="total">
+              Totale: &euro; &nbsp;{{ store.calcTotal() }}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  <!-- </div> -->
+   </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -203,29 +182,36 @@ export default {
 
 .container {
   margin-top: 90px;
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: 1fr 1fr;
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    // padding-inline: 8rem;
+    gap: 3rem;
 
-  .col-sx,
-  .col-dx {
-    .card-header {
-      margin: 10px 0px 20px;
-      font-size: 1.4rem;
-      padding: 5px;
-      // border-bottom: 2px solid $orange;
-      // border-left: 2px solid $orange;
+    @media (min-width: 768px){
+      grid-template-columns: 1fr 300px;
     }
+  }
 
-    .card-body {
-      width: min(500px, 100% - 2rem);
-      border-radius: 1rem;
-      background-color: #FFF2E7;
-      border: 1px solid #FC8019;
-      padding: 2rem;
-      color: #3D4152;
+  .left {
+    display: flex;
+    justify-content: center;
+    
+  }
 
-      .form-group {
+  .right{
+    display: flex;
+    justify-content: flex-start;
+
+  }
+
+  .form-wrapper {
+    h4 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .form-group {
         position: relative;
         margin-bottom: 1.5rem;
         z-index: 2;
@@ -372,59 +358,56 @@ export default {
         height: 100px;
         font-family: 'Outfit', sans-serif;
       }
-    }
   }
 
-  .col-dx {
+  .order-wrapper,
+  .form-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: min(100%, 300px);
+    max-height: 750px;
+    border-radius: 1rem;
+    background-color: $linen;
+    border: 1px solid $orange;
+    padding: 2rem;
+    color: $charcoal;
+    h4 {
+        font-weight: 700;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+    
     .card-body {
       overflow: auto;
-      max-width: 800px;
-      height: 60vh;
-      padding: 18px;
-
+      
+      
+      
       .cart-card {
         position: relative;
-        // border-bottom: 1px solid rgba($orange, 0.5);
-        padding: 15px 10px;
-        margin-bottom: 15px;
+        padding: 1rem 0.75rem;
+        margin-bottom: 1rem;
         background-color: rgba($orange, 0.2);
-        border-radius: 25px;
+        border-radius: 1rem;
         width: 100%;
 
         .cart-card-name {
-          font-size: 18px;
+          font-size: 1rem;
+          font-weight: 600;
           display: flex;
           justify-content: space-between;
-        }
-
-        .cart-item-delete {
-          background-color: red;
-          position: absolute;
-          right: 8px;
-          bottom: 8px;
-          color: $linen;
-          border-radius: 50px;
-          aspect-ratio: 1/1;
-          width: 30px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: 100ms linear;
-
-          &:hover {
-            transform: scale(1.1);
-            cursor: pointer;
-          }
-
-          &:active {
-            transform: scale(1);
+          .partial-price {
+            flex-shrink: 0;
           }
         }
+
+        
 
         .cart-card-counter {
           display: flex;
           gap: 10px;
           margin-top: 20px;
+          
 
           .counter {
             background-color: $orange;
@@ -457,6 +440,21 @@ export default {
         }
       }
     }
+    .cart-total {
+      margin-top: auto;
+    }
+    .total {
+      margin-top: 1rem;
+      padding: 0.625rem 1rem;
+      color: $black;
+      border-radius: 25px;
+      background-color: $white;
+
+    }
+  }
+
+  .form-wrapper {
+    width: min(100%, 450px);
   }
 }
 </style>
