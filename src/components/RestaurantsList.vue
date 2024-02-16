@@ -1,13 +1,18 @@
 <script>
+import vueDebounce from 'vue-debounce';
 import Categories from '../components/Categories.vue';
 import axios from 'axios';
 import { store } from '../store'
 export default {
+    directives: {
+        debounce: vueDebounce({ lock: true })
+    },
     data() {
         return {
             store: store,
             restaurantsArray: [],
             PATH: 'http://127.0.0.1:8000/storage/',
+            debounceTimer: null
         }
     },
     components: {
@@ -22,10 +27,16 @@ export default {
                 })
         },
         fetchRestaurantsByName() {
-            axios.post('http://127.0.0.1:8000/api/users', this.store.request)
-                .then(res => {
-                    this.restaurantsArray = res.data.results;
-                })
+            // Cancella il timer del debounce se è già stato avviato
+            clearTimeout(this.debounceTimer);
+
+            // Avvia un nuovo timer per eseguire la funzione dopo 500ms (1/2 secondo)
+            this.debounceTimer = setTimeout(() => {
+                axios.post('http://127.0.0.1:8000/api/users', this.store.request)
+                    .then(res => {
+                        this.restaurantsArray = res.data.results;
+                    });
+            }, 500);
         },
         resetFilter() {
             this.store.request.name = '';
@@ -39,7 +50,6 @@ export default {
     created() {
         this.fetchRestaurants();
     }
-
 }
 </script>
 
@@ -48,10 +58,11 @@ export default {
         <div class="container">
             <h2 class="title">Cosa vuoi mangiare?</h2>
             <div class="search">
-                <input type="text" name="restaurant-name" id="restaurant-name" class="restaurant-search" placeholder="Cerca il nome di un ristorante" v-model="store.request.name"
-                    @keyup="fetchRestaurantsByName">
-                
-                    <button class="btn" @click="resetFilter()">Reset</button>
+                <input type="text" name="restaurant-name" id="restaurant-name" class="restaurant-search"
+                    placeholder="Cerca il nome di un ristorante" v-model="store.request.name"
+                    @keyup="fetchRestaurantsByName()">
+
+                <button class="btn" @click="resetFilter()">Reset</button>
             </div>
 
 
@@ -64,12 +75,14 @@ export default {
                         <img :src="this.PATH + restaurant.restaurant_img" alt="cover">
                     </div>
                     <div class="restaurant-card-body">
-                        <h4 class="name">{{ restaurant.business_name}}</h4>
-                        <p class="address">{{ restaurant.address}}</p>
-                        <div class="categories" >
+                        <h4 class="name">{{ restaurant.business_name }}</h4>
+                        <p class="address">{{ restaurant.address }}</p>
+                        <div class="categories">
                             <span class="category" v-for="category in restaurant.types">{{ category.name }}</span>
                         </div>
-                        <router-link class="link" :to="{ name: 'restaurant.show', params: {slug: restaurant.slug} }">Guarda il menù</router-link>
+                        <router-link class="link"
+                            :to="{ name: 'restaurant.show', params: { slug: restaurant.slug } }">Guarda
+                            il menù</router-link>
                     </div>
                 </div>
                 <div class="not-found" v-if="restaurantsArray.length == 0">Nessun ristorante trovato</div>
@@ -121,11 +134,12 @@ section.restaurants-list {
         border-radius: 0.5rem;
         font-size: 1rem;
         font-family: 'Outfit', sans-serif;
+
         // margin-bottom: 2rem;
         &:focus {
             border-color: $orange;
         }
-        
+
     }
 
     .grid {
@@ -211,6 +225,7 @@ section.restaurants-list {
                     border-radius: 2rem;
                 }
             }
+
             .link {
                 background-color: $orange;
                 border-radius: 5rem;
@@ -223,4 +238,5 @@ section.restaurants-list {
             }
         }
     }
-}</style>
+}
+</style>

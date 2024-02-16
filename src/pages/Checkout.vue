@@ -18,12 +18,12 @@ export default {
       {
         user_id: store.currentUser,
         order_date: this.currentDate(),
-        client_address: 'via del roma 15/5',
+        client_address: '',
         total_price: store.calcTotal(),
-        details: 'qualcosa',
-        client_email: 'oggi@gmail.com',
-        client_phone: '3214567891',
-        client_name: 'danieles',
+        details: '',
+        client_email: '',
+        client_phone: '',
+        client_name: '',
         items: store.cart
       }
     }
@@ -44,7 +44,20 @@ export default {
       axios.post('http://127.0.0.1:8000/api/orders', this.orders)
         .then(res => {
           console.log(res.data.message);
-        })
+        });
+      this.orders =
+      {
+        user_id: '',
+        order_date: '',
+        client_address: '',
+        total_price: '',
+        details: '',
+        client_email: '',
+        client_phone: '',
+        client_name: '',
+        items: []
+      }
+      this.store.emptyCart();
     },
     isValidEmail(email) {
       // Utilizza un'espressione regolare per validare l'email
@@ -776,4 +789,5 @@ export default {
   .form-wrapper {
     width: min(100%, 450px);
   }
-}</style>
+}
+</style>
