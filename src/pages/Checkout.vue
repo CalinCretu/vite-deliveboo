@@ -13,11 +13,49 @@ export default {
       store,
       hostedFieldInstance: false,
       error: "",
+
       CartMobileOrder: false,
       
+
+      orders: [
+        {
+          order_date: '2024/02/15-15:35:00',
+          client_address: 'via del roma 15/5',
+          total_price: 200.20,
+          details: 'qualcosa',
+          client_email: 'oggi@gmail.com',
+          client_phone: '3214567891',
+          client_name: 'danieles',
+          user_id: 1,
+          item_id: 10,
+          quantity: 10,
+          partial_price: 100
+        },
+        {
+          order_date: '2024/02/15-15:35:00',
+          client_address: 'via del milano 15/5',
+          total_price: 400.20,
+          details: 'niente',
+          client_email: 'domani@gmail.com',
+          client_phone: '3214567891',
+          client_name: 'marcos',
+          user_id: 1,
+          item_id: 20,
+          quantity: 10,
+          partial_price: 120
+        }
+      ]
+
     }
   },
   methods: {
+    sendOrders() {
+      axios.post('http://127.0.0.1:8000/api/orders', this.orders)
+        .then(res => {
+          console.log(res.data.message);
+        })
+
+    },
     payWithCreditCard() {
       if (this.hostedFieldInstance) {
 
@@ -26,9 +64,13 @@ export default {
         this.hostedFieldInstance.tokenize().then(payload => {
           console.log(payload);
           this.store.paymentRequest.nonce = payload.nonce;
+
           this.store.paymentRequest.amount = this.store.calcTotal(); 
           this.successTransition();
           this.createTransaction()
+
+          this.store.paymentRequest.amount = this.store.calcTotal();
+
         })
           .catch(err => {
             console.error(err);
@@ -121,6 +163,7 @@ export default {
   <div class="container">
 
     <div class="grid">
+
         <div class="left">
           <div class="form-wrapper">
             
@@ -206,6 +249,7 @@ export default {
             <div class="cart-total">
               <div class="total">
                 Totale: &euro; &nbsp;{{ store.calcTotal() }}
+
               </div>
             </div>
           </div>
@@ -266,15 +310,18 @@ export default {
 
 .container {
   margin-top: 90px;
+
   .grid {
     display: grid;
     grid-template-columns: 1fr;
     // padding-inline: 8rem;
     
 
+
     @media (min-width: 768px){
       grid-template-columns: 1fr minmax(375px, 450px) 300px 1fr;
       gap: 2rem;
+
     }
   }
 
@@ -282,13 +329,17 @@ export default {
     
     display: flex;
     justify-content: center;
+
     @media (min-width: 768px) {
       grid-column: 2 /3;
     }
     
+
+
+
   }
 
-  .right{
+  .right {
     display: flex;
     justify-content: flex-start;
 
@@ -301,6 +352,7 @@ export default {
       margin-bottom: 1rem;
       
     }
+
     .form-group {
         position: relative;
         margin-bottom: 1rem;
@@ -316,146 +368,154 @@ export default {
           transition: $transition;
         }
 
-        textarea~label {
-          position: absolute;
-          left: 1rem;
-          top: 1rem;
-          transform: translateY(-50%);
-          font-size: 1rem;
-          z-index: 1;
-          transition: $transition;
-        }
 
-        input:focus,
-        input:valid,
-        textarea:focus,
-        textarea:valid {
-          border-color: $orange;
-        }
+   
 
-        input:focus~label,
-        input:valid~label,
-        textarea:focus~label,
-        textarea:valid~label {
-          top: 0;
-          font-size: 0.875rem;
-          background-color: $linen;
-          color: $orange;
-          padding-inline: 0.25rem;
-          left: 0.75rem;
-          z-index: 3;
+     
 
-        }
-
-
-
-        #amount {
-          font-size: 1.3rem;
-        }
-
-        #creditCardNumber,
-        #expireDate,
-        #cvv {
-          position: relative;
-          height: 40px;
-          border: 1px solid $silver;
-          border-radius: 0.5rem;
-          font-family: 'Outfit', sans-serif;
-          transition: $transition;
-          z-index: 2;
-
-        }
-
-        #creditCardNumber.braintree-hosted-fields-focused,
-        #expireDate.braintree-hosted-fields-focused,
-        #cvv.braintree-hosted-fields-focused {
-          border-color: $orange;
-        }
-
-        #creditCardNumber.braintree-hosted-fields-focused~label,
-        #expireDate.braintree-hosted-fields-focused~label,
-        #cvv.braintree-hosted-fields-focused~label,
-        #creditCardNumber.braintree-hosted-fields-valid~label,
-        #expireDate.braintree-hosted-fields-valid~label,
-        #cvv.braintree-hosted-fields-valid~label {
-          top: 0;
-          font-size: 0.75rem;
-          background-color: $linen;
-          color: $orange;
-          padding-inline: 0.25rem;
-          left: 0.75rem;
-          z-index: 3;
-        }
-      }
-
-      .form-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-      }
-
-      .form-button {
-        background-color: rgb(247, 202, 0);
-        padding: 10px 15px;
-        border-radius: 25px;
-        cursor: pointer;
+      textarea~label {
+        position: absolute;
+        left: 1rem;
+        top: 1rem;
+        transform: translateY(-50%);
         font-size: 1rem;
-        border: 1px solid transparent;
-
-        &:hover {
-          background-color: rgb(247, 165, 0);
-        }
-
-        &:focus {
-          // padding: 1px;
-          border: 1px solid rgb(0, 217, 255);
-          box-shadow: 0px 0px 5px 2px rgba(0, 255, 255, 0.5);
-        }
+        z-index: 1;
+        transition: $transition;
       }
 
-      .error-msg,
-      .alert-success {
-        margin: 30px 0px;
+      input:focus,
+      input:valid,
+      textarea:focus,
+      textarea:valid {
+        border-color: $orange;
       }
 
-      .alert-success {
-        color: green;
+      input:focus~label,
+      input:valid~label,
+      textarea:focus~label,
+      textarea:valid~label {
+        top: 0;
+        font-size: 0.875rem;
+        background-color: $linen;
+        color: $orange;
+        padding-inline: 0.25rem;
+        left: 0.75rem;
+        z-index: 3;
+
       }
 
-      .error-msg {
-        color: red;
+
+
+      #amount {
+        font-size: 1.3rem;
       }
 
-      input,
-      textarea {
-        background-color: transparent;
+      #creditCardNumber,
+      #expireDate,
+      #cvv {
+        position: relative;
+        height: 40px;
         border: 1px solid $silver;
-        line-height: 40px;
         border-radius: 0.5rem;
-        padding-left: 1rem;
-        font-size: 1rem;
+        font-family: 'Outfit', sans-serif;
         transition: $transition;
         z-index: 2;
-        width: 100%;
 
-        &:focus {
-          outline: none;
-        }
-
-        &:not(:placeholder-shown)+label {
-          top: 0;
-          font-size: 0.875rem;
-          padding-inline: 0.25rem;
-          left: 0.5rem;
-          background-color: $linen;
-        }
       }
+
+      #creditCardNumber.braintree-hosted-fields-focused,
+      #expireDate.braintree-hosted-fields-focused,
+      #cvv.braintree-hosted-fields-focused {
+        border-color: $orange;
+      }
+
+      #creditCardNumber.braintree-hosted-fields-focused~label,
+      #expireDate.braintree-hosted-fields-focused~label,
+      #cvv.braintree-hosted-fields-focused~label,
+      #creditCardNumber.braintree-hosted-fields-valid~label,
+      #expireDate.braintree-hosted-fields-valid~label,
+      #cvv.braintree-hosted-fields-valid~label {
+        top: 0;
+        font-size: 0.75rem;
+        background-color: $linen;
+        color: $orange;
+        padding-inline: 0.25rem;
+        left: 0.75rem;
+        z-index: 3;
+      }
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .form-button {
+      background-color: rgb(247, 202, 0);
+      padding: 10px 15px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      border: 1px solid transparent;
+
+      &:hover {
+        background-color: rgb(247, 165, 0);
+      }
+
+      &:focus {
+        // padding: 1px;
+        border: 1px solid rgb(0, 217, 255);
+        box-shadow: 0px 0px 5px 2px rgba(0, 255, 255, 0.5);
+      }
+    }
+
+    .error-msg,
+    .alert-success {
+      margin: 30px 0px;
+    }
+
+    .alert-success {
+      color: green;
+    }
+
+    .error-msg {
+      color: red;
+    }
+
+    input,
+    textarea {
+      background-color: transparent;
+      border: 1px solid $silver;
+      line-height: 40px;
+      border-radius: 0.5rem;
+      padding-left: 1rem;
+      font-size: 1rem;
+      transition: $transition;
+      z-index: 2;
+      width: 100%;
+
+      &:focus {
+        outline: none;
+      }
+
 
       textarea {
         resize: none;
         height: 80px;
         font-family: 'Outfit', sans-serif;
+
+      &:not(:placeholder-shown)+label {
+        top: 0;
+        font-size: 0.875rem;
+        padding-inline: 0.25rem;
+        left: 0.5rem;
+        background-color: $linen;
+
       }
+    }
+
+    
   }
 
   .order-wrapper,
@@ -469,7 +529,9 @@ export default {
     border: 1px solid $orange;
     padding: 2rem 1rem;
     color: $charcoal;
+
     h4 {
+
         font-weight: 700;
         font-size: 1.25rem;
         margin-bottom: 1rem;
@@ -480,11 +542,16 @@ export default {
       }
 
     
+
+   
+    }
+
+
     .card-body {
       overflow: auto;
-      
-      
-      
+
+
+
       .cart-card {
         position: relative;
         padding: 1rem 0.75rem;
@@ -498,18 +565,19 @@ export default {
           font-weight: 600;
           display: flex;
           justify-content: space-between;
+
           .partial-price {
             flex-shrink: 0;
           }
         }
 
-        
+
 
         .cart-card-counter {
           display: flex;
           gap: 10px;
           margin-top: 20px;
-          
+
 
           .counter {
             background-color: $orange;
@@ -542,9 +610,11 @@ export default {
         }
       }
     }
+
     .cart-total {
       margin-top: auto;
     }
+
     .total {
       margin-top: 1rem;
       padding: 0.625rem 1rem;
