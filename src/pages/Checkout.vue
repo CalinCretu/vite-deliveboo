@@ -14,46 +14,37 @@ export default {
       hostedFieldInstance: false,
       error: "",
       CartMobileOrder: false,
-      orders: [
-        {
-          order_date: '2024/02/15-15:35:00',
-          client_address: 'via del roma 15/5',
-          total_price: 200.20,
-          details: 'qualcosa',
-          client_email: 'oggi@gmail.com',
-          client_phone: '3214567891',
-          client_name: 'danieles',
-          user_id: 1,
-          item_id: 10,
-          quantity: 10,
-          partial_price: 100
-        },
-        {
-          order_date: '2024/02/15-15:35:00',
-          client_address: 'via del milano 15/5',
-          total_price: 400.20,
-          details: 'niente',
-          client_email: 'domani@gmail.com',
-          client_phone: '3214567891',
-          client_name: 'marcos',
-          user_id: 1,
-          item_id: 20,
-          quantity: 10,
-          partial_price: 120
-        }
-      ]
-
+      orders:
+      {
+        user_id: store.currentUser,
+        order_date: this.currentDate(),
+        client_address: 'via del roma 15/5',
+        total_price: store.calcTotal(),
+        details: 'qualcosa',
+        client_email: 'oggi@gmail.com',
+        client_phone: '3214567891',
+        client_name: 'danieles',
+        items: store.cart
+      }
     }
-
-
   },
   methods: {
+    currentDate() {
+      const currentdate = new Date();
+      const datetime = currentdate.getFullYear() + "-"
+        + (currentdate.getMonth() + 1) + "-"
+        + currentdate.getDate() + " "
+        + currentdate.getHours() + ":"
+        + currentdate.getMinutes() + ":"
+        + currentdate.getSeconds();
+
+      return datetime;
+    },
     sendOrders() {
       axios.post('http://127.0.0.1:8000/api/orders', this.orders)
         .then(res => {
           console.log(res.data.message);
         })
-
     },
     payWithCreditCard() {
       if (this.hostedFieldInstance) {
@@ -67,7 +58,6 @@ export default {
           this.successTransition();
           this.createTransaction()
           this.sendOrders()
-
         })
           .catch(err => {
             console.error(err);
@@ -92,7 +82,6 @@ export default {
                 'padding-left': '1rem',
                 'backgroud-color': 'red'
               },
-
             },
             fields: {
               number: {
@@ -116,7 +105,6 @@ export default {
           this.hostedFieldInstance = hostedFieldInstance;
         })
         .catch(err => {
-
         });
     },
     async createTransaction() {
@@ -149,11 +137,7 @@ export default {
   mounted() {
     this.createBraintree();
     // this.toastProva();
-
   },
-
-
-
 }
 </script>
 
@@ -168,28 +152,29 @@ export default {
           <h4>Inserisci i dati richiesti per procedere con il pagamento</h4>
           <form>
             <div class="form-group">
-              <input type="text" id="nome" name="nome" placeholder="&nbsp" required>
+              <input v-model="orders.client_name" type="text" id="nome" name="nome" placeholder="&nbsp" required>
               <label for="nome">Nome</label>
             </div>
 
             <div class="form-group">
-              <input type="email" id="mail" name="mail" placeholder="&nbsp" required>
+              <input v-model="orders.client_email" type="email" id="mail" name="mail" placeholder="&nbsp" required>
               <label for="mail">Email</label>
             </div>
 
             <div class="form-group">
-              <input type="tel" id="telefono" name="telefono" placeholder="&nbsp" required>
+              <input v-model="orders.client_phone" type="tel" id="telefono" name="telefono" placeholder="&nbsp" required>
               <label for="telefono">Telefono</label>
             </div>
 
             <div class="form-group">
-              <textarea id="dettagli_ordine" name="dettagli_ordine" rows="2" cols="50" placeholder="&nbsp"
-                required></textarea>
+              <textarea v-model="orders.details" id="dettagli_ordine" name="dettagli_ordine" rows="2" cols="50"
+                placeholder="&nbsp" required></textarea>
               <label for="dettagli_ordine">Richieste aggiuntive</label>
             </div>
 
             <div class="form-group">
-              <textarea id="indirizzo" name="indirizzo" rows="2" cols="50" placeholder="&nbsp" required></textarea>
+              <textarea v-model="orders.client_address" id="indirizzo" name="indirizzo" rows="2" cols="50"
+                placeholder="&nbsp" required></textarea>
               <label for="indirizzo">Indirizzo di consegna</label>
             </div>
 
