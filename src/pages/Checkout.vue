@@ -46,6 +46,35 @@ export default {
           console.log(res.data.message);
         })
     },
+    isValidEmail(email) {
+      // Utilizza un'espressione regolare per validare l'email
+      const emailRegex = /\S+@\S+\.\S+/;
+      return emailRegex.test(email);
+    },
+    isValidPhone(phone) {
+      // Utilizza un'espressione regolare per validare il numero di telefono
+      const phoneRegex = /^\d{10}$/;
+      return phoneRegex.test(phone);
+    },
+    submitForm() {
+      if (this.isFormValid()) {
+        // Invia il modulo se è valido
+        this.payWithCreditCard();
+      } else {
+        // Gestisci la visualizzazione degli errori o qualsiasi altra azione necessaria
+        console.log('Il modulo non è valido');
+      }
+    },
+    isFormValid() {
+      // Verifica che tutti i campi obbligatori siano stati compilati correttamente
+      return (
+        this.orders.client_name &&
+        this.isValidEmail(this.orders.client_email) &&
+        this.isValidPhone(this.orders.client_phone) &&
+        this.orders.client_address
+        // Aggiungi altre condizioni per gli altri campi del modulo
+      );
+    },
     payWithCreditCard() {
       if (this.hostedFieldInstance) {
 
@@ -155,17 +184,21 @@ export default {
               <input v-model="orders.client_name" type="text" id="nome" name="nome" placeholder="&nbsp" required>
               <label for="nome">Nome</label>
             </div>
-
+            <span v-if="!orders.client_name" class="form-error">Il nome è obbligatorio</span>
             <div class="form-group">
               <input v-model="orders.client_email" type="email" id="mail" name="mail" placeholder="&nbsp" required>
               <label for="mail">Email</label>
             </div>
-
+            <span v-if="!orders.client_email" class="form-error">L'email è obbligatoria</span>
+            <span v-else-if="!isValidEmail(orders.client_email)" class="form-error">Inserisci un'email valida</span>
             <div class="form-group">
-              <input v-model="orders.client_phone" type="tel" id="telefono" name="telefono" placeholder="&nbsp" required>
+              <input v-model="orders.client_phone" type="tel" id="telefono" name="telefono" placeholder="&nbsp" required
+                pattern="\d{10}">
               <label for="telefono">Telefono</label>
             </div>
-
+            <span v-if="!orders.client_phone" class="form-error">Il numero di telefono è obbligatorio</span>
+            <span v-else-if="!isValidPhone(orders.client_phone)" class="form-error">Inserisci un numero di telefono
+              valido</span>
             <div class="form-group">
               <textarea v-model="orders.details" id="dettagli_ordine" name="dettagli_ordine" rows="2" cols="50"
                 placeholder="&nbsp" required></textarea>
@@ -177,7 +210,7 @@ export default {
                 placeholder="&nbsp" required></textarea>
               <label for="indirizzo">Indirizzo di consegna</label>
             </div>
-
+            <span v-if="!orders.client_address" class="form-error">Indirizzo di consegna obbligatorio</span>
             <div class="form-group">
               <div id="creditCardNumber" class="form-control"></div>
               <label>Carta di Credito</label>
@@ -192,16 +225,11 @@ export default {
                 <label>CVV</label>
               </div>
             </div>
-            <button type="submit" class="form-button" @click.prevent="payWithCreditCard">
+            <button v-if="isFormValid()" type="submit" class="form-button" @click.prevent="payWithCreditCard">
               Paga con Carta di Credito
             </button>
+            <button v-else class="form-button btn-grey">Paga con Carta di Credito</button>
           </form>
-          <!-- <div class="alert alert-success" v-if="store.paymentRequest.nonce">
-                Pagamento avvenuto con successo
-              </div>
-              <div class="error-msg" v-if="error">
-                {{ error }}
-              </div> -->
         </div>
       </div>
 
@@ -216,14 +244,8 @@ export default {
                 <div>{{ card.item_name }}</div>
                 <div class="partial-price">€ {{ store.calcPartial(card.item_id) }}</div>
               </div>
-              <!-- <div class="cart-item-delete" @click="store.deleteItem(card.item_id)">
-                  <font-awesome-icon :icon="['fas', 'trash-can']" />
-                </div> -->
               <div class="cart-card-counter">
-                <!-- <button @click="store.removeItem(card.item_id)"><font-awesome-icon :icon="['fas', 'minus']" /></button> -->
                 <div class="quantity">Quantità <span class="counter">{{ card.quantity }}</span></div>
-                <!-- <button @click="store.addQuantity(card.item_id)"><font-awesome-icon :icon="['fas', 'plus']" /></button> -->
-
               </div>
             </div>
           </div>
@@ -262,14 +284,8 @@ export default {
             <div>{{ card.item_name }}</div>
             <div class="partial-price">€ {{ store.calcPartial(card.item_id) }}</div>
           </div>
-          <!-- <div class="cart-item-delete" @click="store.deleteItem(card.item_id)">
-            <font-awesome-icon :icon="['fas', 'trash-can']" />
-          </div> -->
           <div class="cart-card-counter">
-            <!-- <button @click="store.removeItem(card.item_id)"><font-awesome-icon :icon="['fas', 'minus']" /></button> -->
             <div class="quantity">Quantità <span class="counter">{{ card.quantity }}</span></div>
-            <!-- <button @click="store.addQuantity(card.item_id)"><font-awesome-icon :icon="['fas', 'plus']" /></button> -->
-
           </div>
         </div>
       </div>
@@ -280,9 +296,6 @@ export default {
       </div>
     </div>
   </div>
-
-
-  <!-- <button @click="createTransaction()">Submit</button> -->
 </template>
 
 <style scoped lang="scss">
@@ -294,8 +307,6 @@ export default {
   .grid {
     display: grid;
     grid-template-columns: 1fr;
-    // padding-inline: 8rem;
-
 
     @media (min-width: 768px) {
       grid-template-columns: 1fr minmax(375px, 450px) 300px 1fr;
@@ -304,7 +315,6 @@ export default {
   }
 
   .left {
-
     display: flex;
     justify-content: center;
 
@@ -317,15 +327,20 @@ export default {
   .right {
     display: flex;
     justify-content: flex-start;
-
   }
 
   .form-wrapper {
+    .form-error {
+      color: red;
+      margin-bottom: 20px;
+      margin-top: -10px;
+      display: block;
+    }
+
     h4 {
       font-size: 1rem;
       font-weight: 700;
       margin-bottom: 1rem;
-
     }
 
     .form-group {
@@ -371,10 +386,7 @@ export default {
         padding-inline: 0.25rem;
         left: 0.75rem;
         z-index: 3;
-
       }
-
-
 
       #amount {
         font-size: 1.3rem;
@@ -390,7 +402,6 @@ export default {
         font-family: 'Outfit', sans-serif;
         transition: $transition;
         z-index: 2;
-
       }
 
       #creditCardNumber.braintree-hosted-fields-focused,
@@ -434,9 +445,16 @@ export default {
       }
 
       &:focus {
-        // padding: 1px;
         border: 1px solid rgb(0, 217, 255);
         box-shadow: 0px 0px 5px 2px rgba(0, 255, 255, 0.5);
+      }
+    }
+
+    .btn-grey {
+      background-color: grey;
+
+      &:hover {
+        background-color: grey;
       }
     }
 
@@ -508,11 +526,8 @@ export default {
       }
     }
 
-
     .card-body {
       overflow: auto;
-
-
 
       .cart-card {
         position: relative;
@@ -533,13 +548,10 @@ export default {
           }
         }
 
-
-
         .cart-card-counter {
           display: flex;
           gap: 10px;
           margin-top: 20px;
-
 
           .counter {
             background-color: $orange;
@@ -583,7 +595,6 @@ export default {
       color: $black;
       border-radius: 25px;
       background-color: $white;
-
     }
   }
 
@@ -598,7 +609,6 @@ export default {
   .order-wrapper-mobile {
     display: flex;
     flex-direction: column;
-
     position: fixed;
     overflow: auto;
     inset: 0;
@@ -630,8 +640,6 @@ export default {
     .card-body {
       overflow: auto;
 
-
-
       .cart-card {
         position: relative;
         padding: 1rem 0.75rem;
@@ -651,13 +659,10 @@ export default {
           }
         }
 
-
-
         .cart-card-counter {
           display: flex;
           gap: 10px;
           margin-top: 20px;
-
 
           .counter {
             background-color: $orange;
@@ -701,7 +706,6 @@ export default {
       color: $black;
       border-radius: 25px;
       background-color: $white;
-
     }
 
     .pay {
@@ -772,5 +776,4 @@ export default {
   .form-wrapper {
     width: min(100%, 450px);
   }
-}
-</style>
+}</style>
