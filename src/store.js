@@ -62,6 +62,7 @@ export const store = reactive({
     },
   ],
   cart: [],
+  restaurant_id: null,
   currentRoute: "",
   confirmEmptyCart: false,
   showWarning: false,
@@ -87,7 +88,10 @@ export const store = reactive({
           quantity: 1,
           item_price: price,
           item_name: name,
+          partial_price: price
         });
+        this.restaurant_id = user_id;
+
       }
       console.log(this.cart);
     } else {
@@ -163,6 +167,7 @@ export const store = reactive({
     for (let i = 0; i < this.cart.length; i++) {
       if (this.cart[i].item_id == id) {
         part = this.cart[i].item_price * this.cart[i].quantity;
+        this.cart[i].partial_price = part
         return part.toFixed(2);
       }
     }
