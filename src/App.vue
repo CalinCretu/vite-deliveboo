@@ -9,15 +9,28 @@
 
 <script>
 import Header from './components/Header.vue';
+import { store } from './store';
 // import  Footer from './components/Footer.vue';
 
 export default {
   components: {
     Header,
 
-  }
+  },
+  data() {
+    return {
+      store,
+    }
 
+  },
+  created() {
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+      this.store.cart = JSON.parse(savedCart);
+    }
+  }
 }
+
 </script>
 
 <style lang="scss">

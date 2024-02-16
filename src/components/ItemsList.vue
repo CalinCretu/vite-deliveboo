@@ -23,6 +23,16 @@ export default {
     props: {
         items: Array
     },
+    // mounted() {
+    //     if (localStorage.cart) {
+    //         store.cart = localStorage.cart;
+    //     }
+    // },
+    // watch: {
+    //     cart(newCart) {
+    //         localStorage.cart = newCart;
+    //     }
+    // }
 }
 </script>
 

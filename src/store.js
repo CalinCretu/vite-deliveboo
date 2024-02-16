@@ -62,7 +62,6 @@ export const store = reactive({
     },
   ],
   cart: [],
-  restaurant_id: null,
   currentRoute: "",
   confirmEmptyCart: false,
   showWarning: false,
@@ -90,8 +89,8 @@ export const store = reactive({
           item_name: name,
           partial_price: price
         });
-        this.restaurant_id = user_id;
 
+        localStorage.setItem('cart', JSON.stringify(this.cart));
       }
       console.log(this.cart);
     } else {
@@ -134,6 +133,7 @@ export const store = reactive({
   emptyCart() {
     this.cart = [];
     this.showWarning = false;
+    localStorage.removeItem('cart');
   },
   emptyAdd() {
     this.emptyCart();
