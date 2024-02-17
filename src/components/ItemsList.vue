@@ -160,7 +160,7 @@ export default {
                             &euro; &nbsp;{{ store.calcTotal() }}
                         </div>
                     </div>
-                    <div class="right" @click="showCartMobileOrder">
+                    <div class="right" @click="showCartMobileOrder()">
                         Vedi dettagli dell'ordine
                     </div>
 
@@ -183,7 +183,7 @@ export default {
                     </p>
                     <div class="btn-warning">
                         <button class="btn-confrim">
-                            Procedi al pagamento
+                            <router-link :to="{ name: 'checkout' }" class="proceed">Procedi al pagamento</router-link>
                         </button>
                         <button @click="store.emptyAdd()" class="btn-confrim btn-delete">
                             Svuota e Aggiungi
@@ -208,7 +208,7 @@ export default {
         bottom: 0;
         left: 0;
         right: 0;
-        background-color: rgba(0, 0, 0, 0.757);
+        background-color: rgba(0, 0, 0, 0.807);
         z-index: 3;
         display: flex;
         justify-content: center;
@@ -247,10 +247,10 @@ export default {
             max-width: 800px;
             display: flex;
             flex-direction: column;
-            padding: 80px;
             border: 2px solid $orange;
-            border-radius: 50px;
+            border-radius: 25px;
             padding: 20px;
+            backdrop-filter: blur(7px);
         }
 
         .warning-card {
@@ -264,6 +264,7 @@ export default {
 
         .warning-title {
             font-size: 50px;
+            margin-top: -40px;
         }
 
         .warning-text {
@@ -273,15 +274,17 @@ export default {
         .btn-confrim {
             text-align: center;
             margin: 0px 10px 15px;
-            padding: 10px 15px;
-            color: white;
+            padding: 10px 25px;
+            color: black;
             border-radius: 25px;
             background-color: $orange;
             transition: 250ms linear;
+            font-size: 16px;
 
             &:hover {
                 cursor: pointer;
                 transform: scale(1.1);
+                color: $linen;
             }
 
             &:active {
@@ -607,10 +610,7 @@ export default {
         .right {
             cursor: pointer;
         }
-
     }
-
-
 
     .cart-body {
         overflow: auto;
