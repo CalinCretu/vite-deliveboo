@@ -63,6 +63,7 @@ export default {
         color: white;
         gap: 1rem;
         z-index: 2;
+        border-radius: 20px;
 
         @media (max-width: 1200px) {
             width: 50%;

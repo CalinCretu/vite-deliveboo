@@ -105,6 +105,7 @@ export const store = reactive({
     for (let i = 0; i < this.cart.length; i++) {
       if (this.cart[i].item_id == id) {
         this.cart[i].quantity++;
+        localStorage.setItem('cart', JSON.stringify(this.cart));
         return true;
       }
     }
@@ -117,6 +118,7 @@ export const store = reactive({
         if (this.cart[i].quantity == 0) {
           this.cart.splice(i, 1);
         }
+        localStorage.setItem('cart', JSON.stringify(this.cart));
         return true;
       }
     }
@@ -126,6 +128,7 @@ export const store = reactive({
     for (let i = 0; i < this.cart.length; i++) {
       if (this.cart[i].item_id == id) {
         this.cart.splice(i, 1);
+        localStorage.setItem('cart', JSON.stringify(this.cart));
         return true;
       }
     }
@@ -139,6 +142,7 @@ export const store = reactive({
     this.emptyCart();
     this.cart.push(this.warningItem);
     this.currentUser = this.warningUser;
+    localStorage.setItem('cart', JSON.stringify(this.cart));
   },
   returnQty(id) {
     for (let i = 0; i < this.cart.length; i++) {
