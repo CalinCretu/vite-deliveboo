@@ -12,8 +12,11 @@ export default {
     return {
       store,
       hostedFieldInstance: false,
+      showLastOrder: false,
       error: "",
       CartMobileOrder: false,
+      lastOrder: {},
+      lastOrderTot: 0,
       orders:
       {
         user_id: store.currentUser,
@@ -29,6 +32,9 @@ export default {
     }
   },
   methods: {
+    hideLastOrder() {
+      this.showLastOrder = false;
+    },
     currentDate() {
       const currentdate = new Date();
       const datetime = currentdate.getFullYear() + "-"
@@ -45,6 +51,8 @@ export default {
         .then(res => {
           console.log(res.data.message);
         });
+      this.lastOrder = this.orders;
+      this.lastOrderTot = this.store.calcTotal()
       this.orders =
       {
         user_id: '',
@@ -84,6 +92,7 @@ export default {
         this.orders.client_name &&
         this.isValidEmail(this.orders.client_email) &&
         this.isValidPhone(this.orders.client_phone) &&
+        // (this.store.cart.length > 0) &&
         this.orders.client_address
         // Aggiungi altre condizioni per gli altri campi del modulo
       );
@@ -98,7 +107,8 @@ export default {
           this.store.paymentRequest.nonce = payload.nonce;
           this.store.paymentRequest.amount = this.store.calcTotal();
           this.successTransition();
-          this.createTransaction()
+          this.createTransaction();
+          this.showLastOrder = true;
           this.sendOrders()
         })
           .catch(err => {
@@ -185,14 +195,58 @@ export default {
 
 <template>
   <div class="container">
-
-    <div class="grid">
+    <div class="success" v-show="showLastOrder">
+      <div class="success-wrapper">
+        <div class="success-close-btn" @click="hideLastOrder()">
+          <font-awesome-icon :icon="['fas', 'xmark']" />
+        </div>
+        <h4>Il tuo ordine è avvenuto con successo</h4>
+        <div class="success-body">
+          <ul class="success-left success-list">
+            <li class="success-info">
+              <div class="success-info-tag">Nome:</div>
+              <div>{{ lastOrder.client_name }}</div>
+            </li>
+            <li class="success-info">
+              <div class="success-info-tag">Email:</div>
+              <div>{{ lastOrder.client_email }}</div>
+            </li>
+            <li class="success-info">
+              <div class="success-info-tag">Indirizzo:</div>
+              <div>{{ lastOrder.client_address }}</div>
+            </li>
+            <li class="success-info">
+              <div class="success-info-tag">Telefono:</div>
+              <div>{{ lastOrder.client_phone }}</div>
+            </li>
+            <li class="success-details">
+              <div class="success-info-tag">Richieste Aggiuntive:</div>
+              <div>{{ lastOrder.details }}</div>
+            </li>
+          </ul>
+          <ul class="success-right success-list">
+            <li v-for="item in lastOrder.items" class="success-item">
+              <div class="item-details">
+                <div class="item-qty">X{{ item.quantity }}</div>
+                <div>{{ item.item_name }}</div>
+              </div>
+              <div class="item-price">&euro; &nbsp;{{ item.partial_price }}</div>
+            </li>
+            <li class="success-item success-total">
+              <div class="success-tot-tag">Totale:</div>
+              <div class="item-price">&euro; &nbsp;{{ lastOrderTot }}</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="grid" v-show="!showLastOrder">
       <div class="left">
         <div class="form-wrapper">
-
+          <p class="empty-form" v-if="store.cart.length === 0">Il tuo carrello è vuoto</p>
           <!-- <div class="card-body"> -->
-          <h4>Inserisci i dati richiesti per procedere con il pagamento</h4>
-          <form>
+          <h4 v-if="store.cart.length > 0">Inserisci i dati richiesti per procedere con il pagamento</h4>
+          <form v-if="store.cart.length > 0">
             <div class="form-group">
               <input v-model="orders.client_name" type="text" id="nome" name="nome" placeholder="&nbsp" required>
               <label for="nome">Nome</label>
@@ -214,7 +268,7 @@ export default {
               valido</span>
             <div class="form-group">
               <textarea v-model="orders.details" id="dettagli_ordine" name="dettagli_ordine" rows="2" cols="50"
-                placeholder="&nbsp" required></textarea>
+                placeholder="&nbsp"></textarea>
               <label for="dettagli_ordine">Richieste aggiuntive</label>
             </div>
 
@@ -250,7 +304,6 @@ export default {
         <div class="order-wrapper">
           <h4>Il tuo ordine</h4>
           <div class="card-body">
-
             <p v-if="store.cart.length === 0">Il tuo carrello è vuoto</p>
             <div class="cart-card" v-for="card in store.cart">
               <div class="cart-card-name">
@@ -264,7 +317,8 @@ export default {
           </div>
           <div class="cart-total">
             <div class="total">
-              Totale: &euro; &nbsp;{{ store.calcTotal() }}
+              <div>Totale:</div>
+              <div>&euro; &nbsp;{{ store.calcTotal() }}</div>
             </div>
           </div>
         </div>
@@ -283,7 +337,6 @@ export default {
       <div class="right" @click="showCartMobileOrder">
         Vedi dettagli dell'ordine
       </div>
-
     </div>
     <div class="order-wrapper-mobile" :class="CartMobileOrder ? 'active' : ''">
       <div class="title">
@@ -304,7 +357,8 @@ export default {
       </div>
       <div class="cart-total">
         <div class="total">
-          Totale: &euro; &nbsp;{{ store.calcTotal() }}
+          <div>Totale:</div>
+          <div>&euro; &nbsp;{{ store.calcTotal() }}</div>
         </div>
       </div>
     </div>
@@ -316,6 +370,173 @@ export default {
 
 .container {
   margin-top: 90px;
+
+  .success {
+    width: 95%;
+    margin: 0 auto;
+
+    @media (min-width: 768px) {
+      width: 750px;
+    }
+
+    .success-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-height: 750px;
+      border-radius: 1rem;
+      background-color: #FFF2E7;
+      border: 1px solid #FC8019;
+      padding: 2rem 1rem;
+      color: #3D4152;
+
+      .success-close-btn {
+        right: 0;
+        top: 0;
+        position: absolute;
+        margin: 10px 10px 0px 0px;
+        font-size: 1.2rem;
+        background-color: $linen;
+        border-radius: 50px;
+        width: 35px;
+        aspect-ratio: 1/1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 250ms linear;
+        flex-shrink: 0;
+
+        &:hover {
+          color: $linen;
+          background-color: $orange;
+          rotate: 90deg;
+          cursor: pointer;
+        }
+
+        &:active {
+          background-color: $linen;
+          color: $orange;
+        }
+      }
+
+      h4 {
+        align-self: center;
+        color: green;
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+
+        @media (min-width: 768px) {
+          font-size: 1.5rem;
+        }
+      }
+
+      .success-body {
+        display: flex;
+        flex-direction: column;
+
+        @media (min-width: 768px) {
+          flex-direction: row;
+        }
+
+        .success-left {
+          border-bottom: 2px solid #FC8019;
+          padding-bottom: 1rem;
+
+          @media (min-width: 768px) {
+            border-right: 2px solid #FC8019;
+            padding-right: 1rem;
+            border-bottom: 0;
+            padding-bottom: 0;
+          }
+
+          .success-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+
+            .success-info-tag {
+              color: #FC8019;
+              font-weight: 600;
+              flex-shrink: 0;
+            }
+          }
+
+          .success-info {
+            display: flex;
+            gap: 1rem;
+
+            .success-info-tag {
+              color: #FC8019;
+              font-weight: 600;
+              flex-shrink: 0;
+            }
+          }
+        }
+
+        .success-list {
+          font-size: 0.8rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          width: 100%;
+
+          @media (min-width: 768px) {
+            font-size: 1rem;
+            width: 50%;
+          }
+        }
+
+        .success-right {
+          padding-top: 1rem;
+
+          @media (min-width: 768px) {
+            padding-left: 1rem;
+            padding-top: 0;
+          }
+
+          .success-item {
+            display: flex;
+            justify-content: space-between;
+
+            .item-details {
+              display: flex;
+              align-items: center;
+              flex-shrink: 1;
+              gap: 0.5rem;
+
+              .item-qty {
+                font-size: 0.7rem;
+                color: #FC8019;
+                flex-shrink: 0;
+              }
+            }
+
+            .item-price {
+              font-weight: 600;
+              flex-shrink: 0;
+            }
+          }
+
+          .success-total {
+            flex-grow: 1;
+            display: flex;
+            align-items: flex-end;
+            font-size: 0.9rem;
+
+            @media (min-width: 768px) {
+              font-size: 1.1rem;
+            }
+
+            .success-tot-tag {
+              color: #FC8019;
+            }
+          }
+        }
+      }
+
+    }
+  }
 
   .grid {
     display: grid;
@@ -343,6 +564,11 @@ export default {
   }
 
   .form-wrapper {
+    .empty-form {
+      font-size: 1.3rem;
+      align-self: center;
+    }
+
     .form-error {
       color: red;
       margin-bottom: 20px;
@@ -608,6 +834,8 @@ export default {
       color: $black;
       border-radius: 25px;
       background-color: $white;
+      display: flex;
+      justify-content: space-between;
     }
   }
 
@@ -719,6 +947,8 @@ export default {
       color: $black;
       border-radius: 25px;
       background-color: $white;
+      display: flex;
+      justify-content: space-between;
     }
 
     .pay {
