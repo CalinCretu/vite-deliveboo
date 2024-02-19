@@ -83,6 +83,7 @@ export const store = reactive({
       if (!this.addQuantity(id)) {
         console.log(this.addQuantity(id));
         this.cart.push({
+          user_id: user_id,
           item_id: id,
           quantity: 1,
           item_price: price,
