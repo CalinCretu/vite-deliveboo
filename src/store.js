@@ -38,7 +38,7 @@ export const store = reactive({
     },
     {
       img: "src/assets/img/pizzeria.jpg",
-      name: "pizzeria",
+      name: "Pizzeria",
       id: 6,
       isOn: false,
     },

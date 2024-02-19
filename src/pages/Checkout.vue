@@ -295,7 +295,7 @@ export default {
             <button v-if="isFormValid()" type="submit" class="form-button" @click.prevent="payWithCreditCard">
               Paga con Carta di Credito
             </button>
-            <button v-else class="form-button btn-grey">Paga con Carta di Credito</button>
+            <div v-else class="form-button btn-grey">Paga con Carta di Credito</div>
           </form>
         </div>
       </div>
@@ -691,8 +691,11 @@ export default {
 
     .btn-grey {
       background-color: grey;
+      cursor: not-allowed;
+      width: fit-content;
 
       &:hover {
+        cursor: not-allowed;
         background-color: grey;
       }
     }
@@ -747,7 +750,7 @@ export default {
     display: flex;
     flex-direction: column;
     width: min(100%, 300px);
-    max-height: 750px;
+    max-height: 800px;
     border-radius: 1rem;
     background-color: $linen;
     border: 1px solid $orange;
