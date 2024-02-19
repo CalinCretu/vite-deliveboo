@@ -564,6 +564,12 @@ export default {
   }
 
   .form-wrapper {
+
+    margin-bottom: 5rem;
+
+    @media (min-width: 768px) {
+      margin-bottom: 0;
+    }
     .empty-form {
       font-size: 1.3rem;
       align-self: center;
