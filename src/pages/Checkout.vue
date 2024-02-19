@@ -19,7 +19,7 @@ export default {
       lastOrderTot: 0,
       orders:
       {
-        user_id: store.cart[0].user_id,
+        user_id: store.currentUser,
         order_date: this.currentDate(),
         client_address: '',
         total_price: store.calcTotal(),
@@ -269,7 +269,7 @@ export default {
             <div class="form-group">
               <textarea v-model="orders.details" id="dettagli_ordine" name="dettagli_ordine" rows="2" cols="50"
                 placeholder="&nbsp"></textarea>
-              <label for="dettagli_ordine">Richieste aggiuntive</label>
+              <label for="dettagli_ordine">Richieste aggiuntive (optionale)</label>
             </div>
 
             <div class="form-group">

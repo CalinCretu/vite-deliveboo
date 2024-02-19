@@ -83,14 +83,13 @@ export const store = reactive({
       if (!this.addQuantity(id)) {
         console.log(this.addQuantity(id));
         this.cart.push({
-          user_id: user_id,
           item_id: id,
           quantity: 1,
           item_price: price,
           item_name: name,
           partial_price: price
         });
-
+        localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
         localStorage.setItem('cart', JSON.stringify(this.cart));
       }
       console.log(this.cart);
@@ -143,6 +142,7 @@ export const store = reactive({
     this.emptyCart();
     this.cart.push(this.warningItem);
     this.currentUser = this.warningUser;
+    localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
     localStorage.setItem('cart', JSON.stringify(this.cart));
   },
   returnQty(id) {
