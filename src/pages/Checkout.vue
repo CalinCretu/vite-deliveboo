@@ -19,7 +19,7 @@ export default {
       lastOrderTot: 0,
       orders:
       {
-        user_id: store.cart[0].user_id,
+        user_id: store.currentUser,
         order_date: this.currentDate(),
         client_address: '',
         total_price: store.calcTotal(),
