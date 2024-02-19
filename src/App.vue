@@ -24,6 +24,10 @@ export default {
 
   },
   created() {
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser) {
+      this.store.currentUser = JSON.parse(currentUser);
+    }
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
       this.store.cart = JSON.parse(savedCart);
